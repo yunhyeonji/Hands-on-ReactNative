@@ -8,8 +8,8 @@ export const ButtonTypes = {
 
 const Colors = {
   // 일반 색 , 클릭했을때 색
-  NUMBER: ['#71717a', '#3f3f46'],
-  OPERATOR: ['#f59e0b', '#b45309'],
+  NUMBER: ['#fdf2f8', '#dc2626'],
+  OPERATOR: ['#fdf2f8', '#db2777'],
 };
 
 const Button = ({ title, onPress, buttonStyle, buttonType }) => {
@@ -43,10 +43,19 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 100,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 4,
   },
   title: {
     fontSize: 50,
-    color: '#ffffff',
+    color: '#000000',
   },
 });
 
