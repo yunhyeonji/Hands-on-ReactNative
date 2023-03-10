@@ -8,8 +8,8 @@ export const ButtonTypes = {
 
 const Colors = {
   // 일반 색 , 클릭했을때 색
-  NUMBER: ['#fdf2f8', '#dc2626'],
-  OPERATOR: ['#fdf2f8', '#db2777'],
+  NUMBER: ['#fdf2f8', '#fecdd3'],
+  OPERATOR: ['#fdf2f8', '#fecdd3'],
 };
 
 const Button = ({ title, onPress, buttonStyle, buttonType }) => {
