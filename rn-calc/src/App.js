@@ -51,6 +51,7 @@ export default function App() {
 
     setResult(calculatedNumber);
     setFormula([]);
+    setFormula([calculatedNumber]);
   };
 
   const onPressNumber = (num) => {
