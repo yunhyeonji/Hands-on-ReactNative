@@ -5,7 +5,7 @@ import SigninScreen from './screens/SigninScreen';
 const App = () => {
   return (
     <View style={styles.container}>
-      <StatusBar style="auto" />
+      <StatusBar style="dark" />
       <SigninScreen />
     </View>
   );

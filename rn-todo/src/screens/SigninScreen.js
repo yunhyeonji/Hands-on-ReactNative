@@ -1,4 +1,5 @@
 import { Image, StyleSheet, View } from 'react-native';
+import Input, { keyboardTypes, ReturnKeyTypes } from '../components/input';
 
 const SigninScreen = () => {
   return (
@@ -8,6 +9,15 @@ const SigninScreen = () => {
         style={styles.image}
         resizeMode={'cover'}
       />
+
+      <Input
+        title={'email'}
+        placeholder={'your@email.com'}
+        keyboardType={keyboardTypes.EMAIL}
+        returnKeyType={ReturnKeyTypes.NEXT}
+      />
+
+      <Input title={'password'} secureTextEntry />
     </View>
   );
 };
