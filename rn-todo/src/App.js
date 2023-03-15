@@ -7,6 +7,7 @@ const App = () => {
     <View style={styles.container}>
       <StatusBar style="dark" />
       <SigninScreen />
+      {/* <TestAvoid></TestAvoid> */}
     </View>
   );
 };
