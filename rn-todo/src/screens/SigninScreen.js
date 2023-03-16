@@ -1,11 +1,20 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import Input, { keyboardTypes, ReturnKeyTypes } from '../components/input';
+import Input, {
+  IconNames,
+  keyboardTypes,
+  ReturnKeyTypes,
+} from '../components/input';
 import SafeInputView from '../components/safeInputView';
 
 const SigninScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const passwordRef = useRef(null);
+
+  const onSubmit = () => {
+    console.log(';');
+  };
 
   return (
     <SafeInputView>
@@ -23,13 +32,18 @@ const SigninScreen = () => {
           placeholder={'your@email.com'}
           keyboardType={keyboardTypes.EMAIL}
           returnKeyType={ReturnKeyTypes.NEXT}
+          iconName={IconNames.EMAIL}
+          onSubmitEditing={() => passwordRef.current.focus()}
         />
 
         <Input
+          ref={passwordRef}
           value={password}
           onChangeText={(text) => setPassword(text.trim())}
           title={'password'}
           secureTextEntry
+          iconName={IconNames.Lock}
+          onSubmitEditing={onSubmit}
         />
       </View>
     </SafeInputView>
