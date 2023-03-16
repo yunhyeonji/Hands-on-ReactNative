@@ -8,7 +8,6 @@ import {
 import PropTypes from 'prop-types';
 
 const SafeInputView = ({ children }) => {
-  console.log({children})
   return (
     <KeyboardAvoidingView
       style={styles.avoid}

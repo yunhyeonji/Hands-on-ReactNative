@@ -11,13 +11,14 @@ export const ReturnKeyTypes = {
   NEXT: 'next',
 };
 
-const Input = ({ title, placeholder, ...props }) => {
+const Input = ({ title, placeholder, value, ...props }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
 
       <TextInput
         {...props}
+        value={value}
         style={styles.input}
         // null 이거나 undefind일 때 title을 넣어준다. placeholder={''}이렇게 라도 보내게 되면 placeholder로 인식함
         placeholder={placeholder ?? title}
@@ -41,6 +42,7 @@ Input.defaultProps = {
 };
 
 Input.propTypes = {
+  value: PropTypes.string,
   title: PropTypes.string,
   placeholder: PropTypes.string,
 };
