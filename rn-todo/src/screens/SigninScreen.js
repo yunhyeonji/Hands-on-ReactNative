@@ -1,5 +1,6 @@
-import { useRef, useState } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Image, Keyboard, StyleSheet, View } from 'react-native';
+import Button from '../components/Button';
 import Input, {
   IconNames,
   keyboardTypes,
@@ -11,9 +12,28 @@ const SigninScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const passwordRef = useRef(null);
+  const [disabled, setDisabled] = useState(true);
+
+  // useEffect() 도 Hook이므로 순서가 중요합니다.
+  // useEffect(() => {
+  //   console.log(`always: ${email} ${password}`);
+  // }); // always rendering
+  // useEffect(() => {
+  //   console.log(`mount: ${email} ${password}`);
+  // }, []); // mount
+  // useEffect(() => {
+  //   console.log(`email: ${email} ${password}`);
+  // }, [email]); // email이 변경되었을때 useEffect함수가 실행된다.
+
+  useEffect(() => {
+    setDisabled(!email || !password);
+  }, [email, password]);
 
   const onSubmit = () => {
-    console.log(';');
+    if (!disabled) {
+      Keyboard.dismiss();
+      console.log('HI IM LOGIN BUTTON');
+    }
   };
 
   return (
@@ -45,6 +65,9 @@ const SigninScreen = () => {
           iconName={IconNames.Lock}
           onSubmitEditing={onSubmit}
         />
+        <View style={styles.buttonContainer}>
+          <Button title="LOGIN" onPress={onSubmit} disabled={disabled} />
+        </View>
       </View>
     </SafeInputView>
   );
@@ -60,8 +83,10 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
   },
-  avoid: {
-    flex: 1,
+  buttonContainer: {
+    width: '100%',
+    paddingHorizontal: 20,
+    marginTop: 20,
   },
 });
 
