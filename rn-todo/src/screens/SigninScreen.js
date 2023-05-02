@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Image, Keyboard, StyleSheet, View } from 'react-native';
+import { Alert, Image, Keyboard, StyleSheet, View } from 'react-native';
+import { signIn } from '../api/auth';
 import Button from '../components/Button';
 import Input, {
   IconNames,
@@ -13,6 +14,7 @@ const SigninScreen = () => {
   const [password, setPassword] = useState('');
   const passwordRef = useRef(null);
   const [disabled, setDisabled] = useState(true);
+  const [isLoading, setISLoading] = useState(false);
 
   // useEffect() 도 Hook이므로 순서가 중요합니다.
   // useEffect(() => {
@@ -29,10 +31,34 @@ const SigninScreen = () => {
     setDisabled(!email || !password);
   }, [email, password]);
 
-  const onSubmit = () => {
-    if (!disabled) {
+  const onSubmit = async () => {
+    if (!disabled && !isLoading) {
       Keyboard.dismiss();
-      console.log('HI IM LOGIN BUTTON');
+      setISLoading(true);
+      try {
+        const data = await signIn(email, password);
+        console.log(data);
+        setISLoading(false);
+      } catch (e) {
+        // console.log(e);
+        Alert.alert('SignIn Error', e, [
+          {
+            text: 'OK',
+            onPress: () => setISLoading(false),
+          },
+          // {
+          //   text: 'cancel',
+          //   onPress: () => console.log('cancel'),
+          //   style: 'cancel',
+          // },
+          // {
+          //   text: 'done',
+          //   onPress: () => console.log('done'),
+          //   style: 'destructive',
+          // },
+        ]);
+      }
+      setISLoading(false);
     }
   };
 
@@ -66,7 +92,13 @@ const SigninScreen = () => {
           onSubmitEditing={onSubmit}
         />
         <View style={styles.buttonContainer}>
-          <Button title="LOGIN" onPress={onSubmit} disabled={disabled} />
+          <Button
+            title="LOGIN"
+            // title={'로그인'}
+            onPress={onSubmit}
+            disabled={disabled}
+            isLoading={isLoading}
+          />
         </View>
       </View>
     </SafeInputView>
