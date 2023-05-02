@@ -9,7 +9,7 @@ import Input, {
 } from '../components/input';
 import SafeInputView from '../components/safeInputView';
 
-const SigninScreen = () => {
+const SignInScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const passwordRef = useRef(null);
@@ -122,4 +122,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SigninScreen;
+export default SignInScreen;
