@@ -8,26 +8,22 @@ import Input, {
   ReturnKeyTypes,
 } from '../components/input';
 import SafeInputView from '../components/safeInputView';
+import PropTypes from 'prop-types';
 
-const SignInScreen = ({ navigation, route }) => {
-  console.log(navigation);
-  console.log(route);
+const SignInScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const passwordRef = useRef(null);
   const [disabled, setDisabled] = useState(true);
   const [isLoading, setISLoading] = useState(false);
 
-  // useEffect() 도 Hook이므로 순서가 중요합니다.
   // useEffect(() => {
-  //   console.log(`always: ${email} ${password}`);
-  // }); // always rendering
-  // useEffect(() => {
-  //   console.log(`mount: ${email} ${password}`);
-  // }, []); // mount
-  // useEffect(() => {
-  //   console.log(`email: ${email} ${password}`);
-  // }, [email]); // email이 변경되었을때 useEffect함수가 실행된다.
+  //   navigation.setOptions({
+  //     contentStyle: {
+  //       backgroundColor: email ? 'skyblue' : 'lightgray',
+  //     },
+  //   });
+  // }, [navigation, email]);
 
   useEffect(() => {
     setDisabled(!email || !password);
@@ -40,25 +36,13 @@ const SignInScreen = ({ navigation, route }) => {
       try {
         await signIn(email, password);
         setISLoading(false);
-        // navigation.push('List');
         navigation.navigate('List');
       } catch (e) {
-        // console.log(e);
         Alert.alert('SignIn Error', e, [
           {
             text: 'OK',
             onPress: () => setISLoading(false),
           },
-          // {
-          //   text: 'cancel',
-          //   onPress: () => console.log('cancel'),
-          //   style: 'cancel',
-          // },
-          // {
-          //   text: 'done',
-          //   onPress: () => console.log('done'),
-          //   style: 'destructive',
-          // },
         ]);
       }
       setISLoading(false);
@@ -106,6 +90,10 @@ const SignInScreen = ({ navigation, route }) => {
       </View>
     </SafeInputView>
   );
+};
+
+SignInScreen.propTypes = {
+  navigation: PropTypes.object,
 };
 
 const styles = StyleSheet.create({
