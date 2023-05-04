@@ -9,13 +9,10 @@ import Input, {
 } from '../components/input';
 import SafeInputView from '../components/safeInputView';
 import PropTypes from 'prop-types';
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 // react-native에 있는 SafeAreaView는 ios에서만 적용 가능
 
-const SignInScreen = ({ navigation }) => {
+const SignInScreen = ({ navigation, setUser }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const passwordRef = useRef(null);
@@ -23,7 +20,7 @@ const SignInScreen = ({ navigation }) => {
   const [isLoading, setISLoading] = useState(false);
 
   const insets = useSafeAreaInsets();
-  console.log(Platform.OS, insets);
+  // console.log(Platform.OS, insets);
 
   // useEffect(() => {
   //   navigation.setOptions({
@@ -42,9 +39,10 @@ const SignInScreen = ({ navigation }) => {
       Keyboard.dismiss();
       setISLoading(true);
       try {
-        await signIn(email, password);
+        const data = await signIn(email, password);
         setISLoading(false);
-        navigation.navigate('List');
+        // navigation.navigate('List');
+        setUser(data);
       } catch (e) {
         Alert.alert('SignIn Error', e, [
           {
