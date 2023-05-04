@@ -9,6 +9,11 @@ import Input, {
 } from '../components/input';
 import SafeInputView from '../components/safeInputView';
 import PropTypes from 'prop-types';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
+// react-native에 있는 SafeAreaView는 ios에서만 적용 가능
 
 const SignInScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -16,6 +21,9 @@ const SignInScreen = ({ navigation }) => {
   const passwordRef = useRef(null);
   const [disabled, setDisabled] = useState(true);
   const [isLoading, setISLoading] = useState(false);
+
+  const insets = useSafeAreaInsets();
+  console.log(Platform.OS, insets);
 
   // useEffect(() => {
   //   navigation.setOptions({
@@ -51,7 +59,12 @@ const SignInScreen = ({ navigation }) => {
 
   return (
     <SafeInputView>
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          { paddingTop: insets.top, paddingBottom: insets.bottom },
+        ]}
+      >
         <Image
           source={require('../../assets/main.png')}
           style={styles.image}
