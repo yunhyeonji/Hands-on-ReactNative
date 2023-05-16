@@ -17,7 +17,7 @@ const HeaderLeftButton = ({ canGoBack, tintColor }) => {
   );
 };
 
-HeaderLeftButton.prototypes = {
+HeaderLeftButton.propTypes = {
   canGoBack: PropTypes.bool,
   tintColor: PropTypes.string,
 };
