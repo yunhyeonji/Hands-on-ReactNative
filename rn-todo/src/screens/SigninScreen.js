@@ -41,9 +41,11 @@ const SignInScreen = () => {
       setISLoading(true);
       try {
         const data = await signIn(email, password);
+        // auth.js에 있는 singIn함수 호출
         setISLoading(false);
         // navigation.navigate('List');
         setUser(data);
+        // 로그인을 성공하면 setUser함수에 data를 넣어 로그인이 된 상태임을 체크한다.
       } catch (e) {
         Alert.alert('SignIn Error', e, [
           {
@@ -82,6 +84,7 @@ const SignInScreen = () => {
                 returnKeyType={ReturnKeyTypes.NEXT}
                 iconName={IconNames.EMAIL}
                 onSubmitEditing={() => passwordRef.current.focus()}
+                // 제출 버튼을 누르면 다음 포커스로 이동한다.
               />
 
               <Input
@@ -92,14 +95,15 @@ const SignInScreen = () => {
                 secureTextEntry
                 iconName={IconNames.Lock}
                 onSubmitEditing={() => onSubmit(setUser)}
+                // 제출 버튼을 누르면 setUser변수와 함꼐 onSubmit함수를 실행한다.
               />
               <View style={styles.buttonContainer}>
                 <Button
                   title="LOGIN"
-                  // title={'로그인'}
                   onPress={() => onSubmit(setUser)}
                   disabled={disabled}
                   isLoading={isLoading}
+                  // 로그인 버튼을 누르면 setUser변수와 함꼐 onSubmit함수를 실행한다.
                 />
               </View>
             </View>
