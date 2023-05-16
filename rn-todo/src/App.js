@@ -1,21 +1,14 @@
-import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
-import AuthStack from './navigations/AuthStack';
-import MainStack from './navigations/MainStack';
-import UserContext from './contexts/UserContext';
+import { UserProvider } from './contexts/UserContext';
+import Navigation from './navigations';
+// index.js 라고 이름을 변경하면 './navigations'만 해도 import가 가능하다.
 
 const App = () => {
-  const [user, setUser] = useState(null);
-
   return (
-    <UserContext.Provider value={{ setUser }}>
-      <NavigationContainer>
-        <StatusBar style="dark" />
-        {/* 로그인이 되어있으면 Main, 로그인이 필요한 상황이라면 Auth 스택이용 */}
-        {user ? <MainStack /> : <AuthStack />}
-      </NavigationContainer>
-    </UserContext.Provider>
+    <UserProvider>
+      <StatusBar style="dark" />
+      <Navigation />
+    </UserProvider>
   );
 };
 

@@ -6,11 +6,11 @@ import Input, {
   IconNames,
   keyboardTypes,
   ReturnKeyTypes,
-} from '../components/input';
-import SafeInputView from '../components/safeInputView';
+} from '../components/Input';
+import SafeInputView from '../components/SafeInputView';
 import PropTypes from 'prop-types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import UserContext from '../contexts/UserContext';
+import { useUserContext } from '../contexts/UserContext';
 // react-native에 있는 SafeAreaView는 ios에서만 적용 가능
 
 const SignInScreen = () => {
@@ -22,6 +22,8 @@ const SignInScreen = () => {
 
   const insets = useSafeAreaInsets();
   // console.log(Platform.OS, insets);
+
+  const { setUser } = useUserContext();
 
   // useEffect(() => {
   //   navigation.setOptions({
@@ -35,7 +37,7 @@ const SignInScreen = () => {
     setDisabled(!email || !password);
   }, [email, password]);
 
-  const onSubmit = async (setUser) => {
+  const onSubmit = async () => {
     if (!disabled && !isLoading) {
       Keyboard.dismiss();
       setISLoading(true);
@@ -59,58 +61,52 @@ const SignInScreen = () => {
   };
 
   return (
-    <UserContext.Consumer>
-      {({ setUser }) => {
-        return (
-          <SafeInputView>
-            <View
-              style={[
-                styles.container,
-                { paddingTop: insets.top, paddingBottom: insets.bottom },
-              ]}
-            >
-              <Image
-                source={require('../../assets/main.png')}
-                style={styles.image}
-                resizeMode={'cover'}
-              />
+    <SafeInputView>
+      <View
+        style={[
+          styles.container,
+          { paddingTop: insets.top, paddingBottom: insets.bottom },
+        ]}
+      >
+        <Image
+          source={require('../../assets/main.png')}
+          style={styles.image}
+          resizeMode={'cover'}
+        />
 
-              <Input
-                value={email}
-                onChangeText={(text) => setEmail(text.trim())}
-                title={'email'}
-                placeholder={'your@email.com'}
-                keyboardType={keyboardTypes.EMAIL}
-                returnKeyType={ReturnKeyTypes.NEXT}
-                iconName={IconNames.EMAIL}
-                onSubmitEditing={() => passwordRef.current.focus()}
-                // 제출 버튼을 누르면 다음 포커스로 이동한다.
-              />
+        <Input
+          value={email}
+          onChangeText={(text) => setEmail(text.trim())}
+          title={'email'}
+          placeholder={'your@email.com'}
+          keyboardType={keyboardTypes.EMAIL}
+          returnKeyType={ReturnKeyTypes.NEXT}
+          iconName={IconNames.EMAIL}
+          onSubmitEditing={() => passwordRef.current.focus()}
+          // 제출 버튼을 누르면 다음 포커스로 이동한다.
+        />
 
-              <Input
-                ref={passwordRef}
-                value={password}
-                onChangeText={(text) => setPassword(text.trim())}
-                title={'password'}
-                secureTextEntry
-                iconName={IconNames.Lock}
-                onSubmitEditing={() => onSubmit(setUser)}
-                // 제출 버튼을 누르면 setUser변수와 함꼐 onSubmit함수를 실행한다.
-              />
-              <View style={styles.buttonContainer}>
-                <Button
-                  title="LOGIN"
-                  onPress={() => onSubmit(setUser)}
-                  disabled={disabled}
-                  isLoading={isLoading}
-                  // 로그인 버튼을 누르면 setUser변수와 함꼐 onSubmit함수를 실행한다.
-                />
-              </View>
-            </View>
-          </SafeInputView>
-        );
-      }}
-    </UserContext.Consumer>
+        <Input
+          ref={passwordRef}
+          value={password}
+          onChangeText={(text) => setPassword(text.trim())}
+          title={'password'}
+          secureTextEntry
+          iconName={IconNames.Lock}
+          onSubmitEditing={onSubmit}
+          // 제출 버튼을 누르면 setUser변수와 함꼐 onSubmit함수를 실행한다.
+        />
+        <View style={styles.buttonContainer}>
+          <Button
+            title="LOGIN"
+            onPress={onSubmit}
+            disabled={disabled}
+            isLoading={isLoading}
+            // 로그인 버튼을 누르면 setUser변수와 함꼐 onSubmit함수를 실행한다.
+          />
+        </View>
+      </View>
+    </SafeInputView>
   );
 };
 
