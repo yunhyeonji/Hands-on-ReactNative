@@ -8,7 +8,6 @@ import Input, {
   ReturnKeyTypes,
 } from '../components/Input';
 import SafeInputView from '../components/SafeInputView';
-import PropTypes from 'prop-types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUserContext } from '../contexts/UserContext';
 // react-native에 있는 SafeAreaView는 ios에서만 적용 가능
@@ -44,7 +43,6 @@ const SignInScreen = () => {
       try {
         const data = await signIn(email, password);
         // auth.js에 있는 singIn함수 호출
-        setISLoading(false);
         // navigation.navigate('List');
         setUser(data);
         // 로그인을 성공하면 setUser함수에 data를 넣어 로그인이 된 상태임을 체크한다.
@@ -98,7 +96,7 @@ const SignInScreen = () => {
         />
         <View style={styles.buttonContainer}>
           <Button
-            title="LOGIN"
+            title="SIGNIN"
             onPress={onSubmit}
             disabled={disabled}
             isLoading={isLoading}
@@ -108,10 +106,6 @@ const SignInScreen = () => {
       </View>
     </SafeInputView>
   );
-};
-
-SignInScreen.propTypes = {
-  navigation: PropTypes.object,
 };
 
 const styles = StyleSheet.create({

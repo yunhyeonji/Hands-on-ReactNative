@@ -7,7 +7,7 @@ import {
   Pressable,
   Keyboard,
 } from 'react-native';
-import Input, { keyboardTypes, ReturnKeyTypes } from '../components/input';
+import Input, { keyboardTypes, ReturnKeyTypes } from '../components/Input';
 
 const TestAvoid = () => {
   return (
