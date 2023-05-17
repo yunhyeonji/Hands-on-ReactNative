@@ -1,5 +1,19 @@
 import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { memo } from 'react';
 import { PropTypes } from 'prop-types';
+
+const ListItem = memo(({ item }) => {
+  console.log(item.id);
+  return (
+    <View style={{ paddingHorizontal: 20, paddingVertical: 10 }}>
+      <Text style={{ fontSize: 20 }}>{item.task}</Text>
+    </View>
+  );
+});
+// React.memo
+// props에 변화가 없을 때 리렌더링을 방지
+// 컴포넌트 렝더링 결과를 기억하고 있다가 리렌더링을 해야 할 때, 변화가 없으면 기억하고 있던 렌더링 결과를 재사용
+// props의 변경 여부가 아닌  다른 이유로 인한 리렌더링에는 영향을 주지 않음
 
 const ListScreen = () => {
   const todos = [];
@@ -30,16 +44,14 @@ const ListScreen = () => {
     <FlatList
       style={Styles.container}
       data={todos}
-      renderItem={({ item }) => {
-        return (
-          <View style={{ paddingHorizontal: 20, paddingVertical: 10 }}>
-            <Text style={{ fontSize: 20 }}>{item.task}</Text>
-          </View>
-        );
-      }}
+      renderItem={({ item }) => <ListItem item={item} />}
       keyExtractor={(item) => {
         item.id.toString();
       }}
+      // windowSize={21} // 이전 화면 10개 / 현재화면 1개 / 다음 화면 10개
+      // 값이 작으면 메모리 절약, 값이 작으면 빈 화면이 나올 사능성이 있음
+
+      windowSize={5} // 이전 화면 2개 / 현재화면 1개 / 다음 화면 2개
     />
   );
 };
