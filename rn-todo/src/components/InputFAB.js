@@ -1,12 +1,13 @@
 import {
   Keyboard,
+  Platform,
   Pressable,
   StyleSheet,
   TextInput,
   View,
   useWindowDimensions,
 } from 'react-native';
-import { PRIMARY, WHITE } from '../Color';
+import { BLACK, PRIMARY, WHITE } from '../Color';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRef, useState, useEffect } from 'react';
 
@@ -54,6 +55,7 @@ const InputFAB = () => {
       <View
         style={[
           styles.container,
+          styles.shadow,
           { bottom: keyboardHeight, alignItems : 'flex-start' },
           isOpened && { width: windowWidth - 20 },
         ]}
@@ -101,6 +103,18 @@ const styles = StyleSheet.create({
     color: WHITE,
     paddingLeft: 20,
     paddingRight: 70,
+  },
+  // ios와 android 에서 사용하는 그림자 컴포넌트가 다름!!
+  shadow: {
+    shadowColor:BLACK,
+    ...Platform.select({
+      ios:{
+        shadowOffset: {width:2, height: 4},
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
+      },
+      android:{ elevation: 5},
+    }),
   },
 });
 
