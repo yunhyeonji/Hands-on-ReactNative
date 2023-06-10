@@ -27,13 +27,25 @@ const InputFAB = () => {
   // 창 켜기
   const open = () => {
     setIsOpened(true);
-    inputRef.current.focus();
+    Animated.timing(inputWidth,{
+      toValue: windowWidth - 20,
+      useNativeDriver: false,
+      duration: 300 // 애니메이션이 동작하는 시간
+    }).start(() => {
+      inputRef.current.focus();
+    })
   };
 
   // 창 끄기
   const close = () => {
     setIsOpened(false);
-    inputRef.current.blur();
+    Animated.timing(inputWidth,{
+      toValue: BUTTON_WIDTH,
+      useNativeDriver: false,
+      duration: 300 // 애니메이션이 동작하는 시간
+    }).start(() => {
+      inputRef.current.blur();
+    })
   };
 
   // 버튼을 클릭했을 때 함수 실행
@@ -61,8 +73,7 @@ const InputFAB = () => {
         style={[
           styles.container,
           styles.shadow,
-          { bottom: keyboardHeight, alignItems : 'flex-start' },
-          isOpened && { width: windowWidth - 20 },
+          { bottom: keyboardHeight, alignItems : 'flex-start', width: inputWidth},
         ]}
       >
         <TextInput
@@ -77,7 +88,7 @@ const InputFAB = () => {
           returnKeyType="done"
           onBlur={close}
         ></TextInput>
-        
+
       </Animated.View>
 
       <Pressable
