@@ -15,8 +15,9 @@ import PropTypes from 'prop-types';
 
 const BOTTOM = 30;
 const BUTTON_WIDTH = 60;
+const RIGHT = 10;
 
-const InputFAB = ({onInsert}) => {
+const InputFAB = ({ onInsert, isBottom }) => {
   const [text, setText] = useState('');
   const [isOpened, setIsOpened] = useState(false);
   const inputRef = useRef(null);
@@ -29,6 +30,14 @@ const InputFAB = ({onInsert}) => {
     inputRange: [0, 1],
     outputRange: ['0deg', '315deg'],
   });
+  const buttonRight = useRef(new Animated.Value(RIGHT)).current;
+
+  useEffect(() => {
+    Animated.timing(buttonRight, {
+      toValue: isBottom ? RIGHT - BUTTON_WIDTH : RIGHT,
+      useNativeDriver: false,
+    }).start();
+  }, [isBottom, buttonRight]);
 
   // 창 켜기
   const open = () => {
@@ -102,6 +111,7 @@ const InputFAB = ({onInsert}) => {
             bottom: keyboardHeight,
             alignItems: 'flex-start',
             width: inputWidth,
+            right: buttonRight,
           },
         ]}
       >
@@ -123,7 +133,11 @@ const InputFAB = ({onInsert}) => {
       <Animated.View
         style={[
           styles.container,
-          { bottom: keyboardHeight, transform: [{ rotate: spin }] },
+          {
+            bottom: keyboardHeight,
+            transform: [{ rotate: spin }],
+            right: buttonRight,
+          },
         ]}
       >
         <Pressable
@@ -143,12 +157,12 @@ const InputFAB = ({onInsert}) => {
 
 InputFAB.propTypes = {
   onInsert: PropTypes.func.isRequired,
-}
+  isBottom: PropTypes.bool,
+};
 
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    right: 10,
     width: BUTTON_WIDTH,
     height: BUTTON_WIDTH,
     borderRadius: BUTTON_WIDTH / 2,
@@ -159,7 +173,7 @@ const styles = StyleSheet.create({
   input: {
     color: WHITE,
     paddingLeft: 20,
-    paddingRight: BUTTON_WIDTH + 10,
+    paddingRight: BUTTON_WIDTH + RIGHT,
   },
   // ios와 android 에서 사용하는 그림자 컴포넌트가 다름!!
   shadow: {
