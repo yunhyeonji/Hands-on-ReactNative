@@ -6,18 +6,23 @@ import {
   TextInput,
   View,
   useWindowDimensions,
+  Animated
 } from 'react-native';
 import { BLACK, PRIMARY, WHITE } from '../Color';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRef, useState, useEffect } from 'react';
 
 const BOTTOM = 30;
+const BUTTON_WIDTH = 60;
+
 const InputFAB = () => {
   const [text, setText] = useState('');
   const [isOpened, setIsOpened] = useState(false);
   const inputRef = useRef(null);
   const windowWidth = useWindowDimensions().width;
   const [keyboardHeight, setKeyboardHeight] = useState(BOTTOM);
+
+  const inputWidth = useRef(new Animated.Value(BUTTON_WIDTH)).current;
 
   // 창 켜기
   const open = () => {
@@ -52,7 +57,7 @@ const InputFAB = () => {
 
   return (
     <>
-      <View
+      <Animated.View
         style={[
           styles.container,
           styles.shadow,
@@ -72,7 +77,9 @@ const InputFAB = () => {
           returnKeyType="done"
           onBlur={close}
         ></TextInput>
-      </View>
+        
+      </Animated.View>
+
       <Pressable
         onPress={onPressButton}
         style={({ pressed }) => [
@@ -92,9 +99,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: BOTTOM,
     right: 10,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: BUTTON_WIDTH,
+    height: BUTTON_WIDTH,
+    borderRadius: BUTTON_WIDTH / 2,
     backgroundColor: PRIMARY.DEFAULT,
     justifyContent: 'center',
     alignItems: 'center',
@@ -102,7 +109,7 @@ const styles = StyleSheet.create({
   input: {
     color: WHITE,
     paddingLeft: 20,
-    paddingRight: 70,
+    paddingRight: BUTTON_WIDTH + 10,
   },
   // ios와 android 에서 사용하는 그림자 컴포넌트가 다름!!
   shadow: {
