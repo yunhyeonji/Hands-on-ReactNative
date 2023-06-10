@@ -11,11 +11,12 @@ import {
 import { BLACK, PRIMARY, WHITE } from '../Color';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRef, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 const BOTTOM = 30;
 const BUTTON_WIDTH = 60;
 
-const InputFAB = () => {
+const InputFAB = ({onInsert}) => {
   const [text, setText] = useState('');
   const [isOpened, setIsOpened] = useState(false);
   const inputRef = useRef(null);
@@ -55,6 +56,7 @@ const InputFAB = () => {
       duration: 300, // 애니메이션이 동작하는 시간
     }).start(() => {
       inputRef.current.blur();
+      setText('');
     });
     Animated.spring(buttonRotation, {
       toValue: 0,
@@ -65,6 +67,12 @@ const InputFAB = () => {
 
   // 버튼을 클릭했을 때 함수 실행
   const onPressButton = () => (isOpened ? close() : open());
+  const onPressInsert = () => {
+    const task = text.trim();
+    if (task) {
+      onInsert(task);
+    }
+  };
 
   // ios에서만 사용하는 함수
   useEffect(() => {
@@ -108,6 +116,7 @@ const InputFAB = () => {
           keyboardAppearance="light"
           returnKeyType="done"
           onBlur={close}
+          onSubmitEditing={onPressInsert}
         ></TextInput>
       </Animated.View>
 
@@ -131,6 +140,10 @@ const InputFAB = () => {
     </>
   );
 };
+
+InputFAB.propTypes = {
+  onInsert: PropTypes.func.isRequired,
+}
 
 const styles = StyleSheet.create({
   container: {
