@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { forwardRef, useState } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -9,17 +9,17 @@ export const InputTypes = {
 };
 
 const InputTypeProps = {
-  EAMIL: {
+  EMAIL: {
     title: 'EMAIL',
     placeholder: 'your@email.com',
-    KeyboardTypes: 'email-address',
+    keyboardType: 'email-address',
     secureTextEntry: false,
     iconName: { active: 'email', inactive: 'email-outline' },
   },
   PASSWORD: {
     title: 'PASSWORD',
     placeholder: 'PASSWORD',
-    KeyboardTypes: 'default',
+    keyboardType: 'default',
     secureTextEntry: true,
     iconName: { active: 'lock', inactive: 'lock-outline' },
   },
@@ -40,9 +40,11 @@ const Input = forwardRef(({ inputType, ...props }, ref) => {
   } = InputTypeProps[inputType];
 
   const [isFocused, setIsFocused] = useState(false);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
+
       <View>
         <TextInput
           ref={ref}
@@ -92,4 +94,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
 export default Input;
