@@ -4,7 +4,6 @@ import {
   Pressable,
   StyleSheet,
   TextInput,
-  View,
   useWindowDimensions,
   Animated,
 } from 'react-native';
