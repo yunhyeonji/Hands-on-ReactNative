@@ -1,19 +1,35 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { AuthRoutes } from '../navigations/routes';
-import PropTypes from 'prop-types';
+import { Keyboard, StyleSheet, View } from 'react-native';
 import Input, { InputTypes } from '../components/Input';
 import Button from '../components/Button';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import SafeInputView from '../components/SafeInputView';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const SignInScreen = ({ navigation }) => {
+const SignInScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const passwordRef = useRef();
+  const [isLoding, setIsLoding] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+
+  const { top } = useSafeAreaInsets();
+
+  useEffect(() => {
+    setDisabled(!email || !password);
+  }, [email, password]);
+
+  const onSubmit = () => {
+    Keyboard.dismiss();
+    if (!disabled && !isLoding) {
+      setIsLoding(true);
+      console.log(email, password);
+      setIsLoding(false);
+    }
+  };
 
   return (
     <SafeInputView>
-      <View style={styles.container}>
-        <Text style={styles.title}>SignInScreen</Text>
+      <View style={[styles.container, { paddingTop: top }]}>
         {/* <Input
         title={'EMAIL'}
         placeholder={'your@email.com'}
@@ -24,42 +40,35 @@ const SignInScreen = ({ navigation }) => {
           inputType={InputTypes.EMAIL}
           value={email}
           onChangeText={(text) => setEmail(text.trim())}
-          styles={{
-            container: { paddingHorizontal: 20, marginBottom: 20 },
-          }}
+          onSubmitEditing={() => passwordRef.current.focus()}
+          styles={{ container: { marginTop: 20 } }}
         />
         <Input
+          ref={passwordRef}
           inputType={InputTypes.PASSWORD}
           value={password}
           onChangeText={(text) => setPassword(text.trim())}
-          styles={inputStyles}
+          onSubmitEditing={onSubmit}
+          styles={{ container: { marginTop: 20 } }}
         />
         <Button
-          title="signup"
-          onPress={() => navigation.navigate(AuthRoutes.SIGN_UP)}
-          styles={{ container: { paddingHorizontal: 20, marginTop: 20 } }}
+          title="signIn"
+          disabled={disabled}
+          isLoding={isLoding}
+          onPress={onSubmit}
+          styles={{ container: { marginTop: 20 } }}
         />
       </View>
     </SafeInputView>
   );
 };
 
-SignInScreen.propTypes = {
-  // PropTypes
-};
-
-const inputStyles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 20,
-    marginBottom: 20,
-  },
-});
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 20,
   },
   title: {
     fontSize: 30,
