@@ -8,7 +8,8 @@ dispatch : reducer로 action을 전달하는 함수
 action : 현재상태를 어떻게 변경해야하는지에 대한 행동 지침
 */
 
-const init = 0;
+// const init = 0;
+const init = { count: 0 };
 
 const CountType = {
   INCREMENT: 'iNCREMENT',
@@ -16,11 +17,14 @@ const CountType = {
 };
 
 const reducer = (state, action) => {
-  switch (action) {
+  switch (action.key) {
     case CountType.INCREMENT:
-      return state + 1;
+      // 리렌더링이 안됨
+      state.count = state.count + 1;
+      return state;
     case CountType.DECREMENT:
-      return state - 1;
+      // 리렌더링이 됨
+      return { count: state.count - 1 };
     default:
       return state;
   }
@@ -32,12 +36,18 @@ const ReducerTest = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{result}</Text>
+      <Text style={styles.title}>{result.count}</Text>
 
       {/* <Button title={'+'} onPress={() => setResult((prev) => prev + 1)} /> */}
       {/* <Button title={'-'} onPress={() => setResult((prev) => prev - 1)} /> */}
-      <Button title={'+'} onPress={() => dispatch(CountType.INCREMENT)} />
-      <Button title={'-'} onPress={() => dispatch(CountType.DECREMENT)} />
+      <Button
+        title={'+'}
+        onPress={() => dispatch({ key: CountType.INCREMENT, value: 2 })}
+      />
+      <Button
+        title={'-'}
+        onPress={() => dispatch({ key: CountType.DECREMENT, value: 1 })}
+      />
     </View>
   );
 };
