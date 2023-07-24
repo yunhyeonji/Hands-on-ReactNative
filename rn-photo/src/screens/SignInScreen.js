@@ -1,4 +1,11 @@
-import { Keyboard, StyleSheet, View, Image, StatusBar } from 'react-native';
+import {
+  Keyboard,
+  StyleSheet,
+  View,
+  Image,
+  StatusBar,
+  ScrollView,
+} from 'react-native';
 import Input, { InputTypes, ReturnKeyTypes } from '../components/Input';
 import Button from '../components/Button';
 import { useState, useRef, useEffect } from 'react';
@@ -44,8 +51,11 @@ const SignInScreen = () => {
             resizeMode={'cover'}
           ></Image>
         </View>
-        <View
+        <ScrollView
           style={[styles.form, { paddingBottom: bottom ? bottom + 10 : 40 }]}
+          contentContainerStyle={{ alignItems: 'center' }}
+          bounces={false}
+          keyboardShouldPersistTaps={'always'}
         >
           <Input
             inputType={InputTypes.EMAIL}
@@ -76,7 +86,7 @@ const SignInScreen = () => {
             title={'SIGNUP'}
             onPress={() => navigate(AuthRoutes.SIGN_UP)}
           ></TextButton>
-        </View>
+        </ScrollView>
       </View>
     </SafeInputView>
   );
@@ -88,10 +98,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   form: {
+    flexGrow: 0,
     backgroundColor: WHITE,
-    alignItems: 'center',
+    // alignItems: 'center',
     paddingHorizontal: 20,
-    paddingTop: 40,
+    paddingTop: 30,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },

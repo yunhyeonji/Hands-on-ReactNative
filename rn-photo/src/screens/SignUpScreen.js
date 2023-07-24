@@ -57,6 +57,8 @@ const SignUpScreen = () => {
           style={[styles.form, { paddingBottom: bottom ? bottom + 10 : 40 }]}
           contentContainerStyle={{ alignItems: 'center' }}
           // <ScrollView>에서는 자식 컴포넌트의 스타일 코드를 contentContainerStyle에 작성해야 함
+          bounces={false} // ios에서 스크롤이 생성되지 않아도, 혹인 스크롤이 끝에 도달해도, 당겼을 때 바운스 여부를 결정하는 props
+          keyboardShouldPersistTaps={'always'}
         >
           <Input
             inputType={InputTypes.EMAIL}
@@ -112,7 +114,7 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE,
     // alignItems: 'center',
     paddingHorizontal: 20,
-    paddingTop: 40,
+    paddingTop: 30,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
