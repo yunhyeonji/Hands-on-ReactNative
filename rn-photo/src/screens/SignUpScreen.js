@@ -29,13 +29,6 @@ const SignUpScreen = () => {
   const { top, bottom } = useSafeAreaInsets();
   const { navigate } = useNavigation();
 
-  useFocusEffect(
-    useCallback(() => {
-      console.log('SIGNUP FOCUS');
-      return () => console.log('SIGNUP BLUR');
-    }, [])
-  );
-
   useEffect(() => {
     setDisabled(!email || !password || password !== passwordConfirm);
   }, [email, password, passwordConfirm]);
