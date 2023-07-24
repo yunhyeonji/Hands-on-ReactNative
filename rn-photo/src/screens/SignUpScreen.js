@@ -1,4 +1,11 @@
-import { Keyboard, StyleSheet, View, Image, StatusBar } from 'react-native';
+import {
+  Keyboard,
+  StyleSheet,
+  View,
+  Image,
+  StatusBar,
+  ScrollView,
+} from 'react-native';
 import Input, { InputTypes, ReturnKeyTypes } from '../components/Input';
 import Button from '../components/Button';
 import { useState, useRef, useEffect } from 'react';
@@ -46,8 +53,10 @@ const SignUpScreen = () => {
             resizeMode={'cover'}
           ></Image>
         </View>
-        <View
+        <ScrollView
           style={[styles.form, { paddingBottom: bottom ? bottom + 10 : 40 }]}
+          contentContainerStyle={{ alignItems: 'center' }}
+          // <ScrollView>에서는 자식 컴포넌트의 스타일 코드를 contentContainerStyle에 작성해야 함
         >
           <Input
             inputType={InputTypes.EMAIL}
@@ -87,7 +96,7 @@ const SignUpScreen = () => {
             title={'SIGNIN'}
             onPress={() => navigate(AuthRoutes.SIGN_IN)}
           ></TextButton>
-        </View>
+        </ScrollView>
       </View>
     </SafeInputView>
   );
@@ -99,8 +108,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   form: {
+    flexGrow: 0,
     backgroundColor: WHITE,
-    alignItems: 'center',
+    // alignItems: 'center',
     paddingHorizontal: 20,
     paddingTop: 40,
     borderTopLeftRadius: 20,
