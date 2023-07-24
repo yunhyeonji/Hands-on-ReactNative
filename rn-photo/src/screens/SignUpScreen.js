@@ -8,11 +8,11 @@ import {
 } from 'react-native';
 import Input, { InputTypes, ReturnKeyTypes } from '../components/Input';
 import Button from '../components/Button';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import SafeInputView from '../components/SafeInputView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import TextButton from '../components/TextButton';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { AuthRoutes } from '../navigations/routes';
 import HR from '../components/HR';
 import { WHITE } from '../colors';
@@ -28,6 +28,13 @@ const SignUpScreen = () => {
 
   const { top, bottom } = useSafeAreaInsets();
   const { navigate } = useNavigation();
+
+  useFocusEffect(
+    useCallback(() => {
+      console.log('SIGNUP FOCUS');
+      return () => console.log('SIGNUP BLUR');
+    }, [])
+  );
 
   useEffect(() => {
     setDisabled(!email || !password || password !== passwordConfirm);
