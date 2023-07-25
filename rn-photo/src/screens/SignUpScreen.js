@@ -57,9 +57,7 @@ const SignUpScreen = () => {
     if (!form.disabled && !form.isLoding) {
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
       console.log(form.email, form.password, form.passwordConfirm);
-      setTimeout(() => {
-        dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
-      }, 1000);
+      dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
     }
   };
 
