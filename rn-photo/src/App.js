@@ -4,6 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { Asset } from 'expo-asset';
+import { initFirebase } from './api/firebase';
 
 const App = () => {
   const [isReady, setIsReady] = useState(false);
@@ -14,6 +15,8 @@ const App = () => {
         // 이미지 캐싱하기
         await SplashScreen.preventAutoHideAsync();
         await Asset.fromModule(require('../assets/cover.png')).downloadAsync();
+
+        initFirebase();
       } catch (e) {
         // eslint-disable-next-line no-console
         console.log(e);
