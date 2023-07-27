@@ -5,6 +5,7 @@ import {
   Image,
   StatusBar,
   ScrollView,
+  Alert,
 } from 'react-native';
 import Input, { InputTypes, ReturnKeyTypes } from '../components/Input';
 import Button from '../components/Button';
@@ -21,7 +22,7 @@ import {
   AuthFormTypes,
   initAuthForm,
 } from '../reducers/authFormReducer';
-import { signIn } from '../api/auth';
+import { getAuthErrorMesseages, signIn } from '../api/auth';
 
 const SignInScreen = () => {
   const passwordRef = useRef(); // 이메일 작성 후 '다음'하면 비밀번호 입력하는 곳으로 이동
@@ -57,8 +58,13 @@ const SignInScreen = () => {
     Keyboard.dismiss();
     if (!form.disabled && !form.isLoding) {
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
-      const user = await signIn(form);
-      console.log(user);
+      try {
+        const user = await signIn(form);
+        console.log(user);
+      } catch (e) {
+        const message = getAuthErrorMesseages(e.code);
+        Alert.alert('로그인 실패', message);
+      }
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
     }
   };

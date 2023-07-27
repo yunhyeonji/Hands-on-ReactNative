@@ -32,7 +32,7 @@ const Button = ({ title, onPress, disabled, isLoding, styles }) => {
         ]}
       >
         {isLoding ? (
-          <ActivityIndicator size={'samll'} color={GRAY.DARK} />
+          <ActivityIndicator size={'small'} color={GRAY.DARK} />
         ) : (
           <Text style={defaultstyles.title}>{title}</Text>
         )}
