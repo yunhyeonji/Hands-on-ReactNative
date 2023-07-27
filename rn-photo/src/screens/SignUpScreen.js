@@ -9,11 +9,11 @@ import {
 } from 'react-native';
 import Input, { InputTypes, ReturnKeyTypes } from '../components/Input';
 import Button from '../components/Button';
-import { useState, useRef, useEffect, useCallback, useReducer } from 'react';
+import { useRef, useReducer } from 'react';
 import SafeInputView from '../components/SafeInputView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import TextButton from '../components/TextButton';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { AuthRoutes } from '../navigations/routes';
 import HR from '../components/HR';
 import { WHITE } from '../colors';
@@ -62,12 +62,16 @@ const SignUpScreen = () => {
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
       try {
         const user = await signUp(form);
-        setUser(user);
+        setUser(user); // unmount 됨
       } catch (e) {
         const message = getAuthErrorMesseages(e.code);
-        Alert.alert('회원가입 실패', message);
+        Alert.alert('회원가입 실패', message, [
+          {
+            text: '확인',
+            onPress: () => dispatch({ type: AuthFormTypes.TOGGLE_LOADING }),
+          },
+        ]);
       }
-      dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
     }
   };
 
