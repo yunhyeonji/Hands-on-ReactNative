@@ -16,7 +16,6 @@
   },
   "plugins": ["react"],
   "rules": {
-    "no-console": "warn",
-    "eslint-disable-next-line": "no-undef"
+    "no-console": "warn"
   }
 }

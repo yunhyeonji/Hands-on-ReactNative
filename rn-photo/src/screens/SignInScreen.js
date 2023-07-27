@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import Input, { InputTypes, ReturnKeyTypes } from '../components/Input';
 import Button from '../components/Button';
-import { useRef, useEffect, useReducer, useCallback } from 'react';
+import { useRef, useReducer, useCallback } from 'react';
 import SafeInputView from '../components/SafeInputView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import TextButton from '../components/TextButton';
@@ -21,14 +21,10 @@ import {
   AuthFormTypes,
   initAuthForm,
 } from '../reducers/authFormReducer';
+import { signIn } from '../api/auth';
 
 const SignInScreen = () => {
   const passwordRef = useRef(); // 이메일 작성 후 '다음'하면 비밀번호 입력하는 곳으로 이동
-
-  // const [email, setEmail] = useState(''); // 이메일 작성하는 것, 리렌더링 됨
-  // const [password, setPassword] = useState(''); // 비밀번호 작성하는 것, 리렌더링 됨
-  // const [isLoding, setIsLoding] = useState(false); // 로그인버튼 눌렀을때 함수가 작동하고있는지, 확인
-  // const [disabled, setDisabled] = useState(false); // 이메일, 비밀번호 작성안하면 로그인버튼 비활성화
 
   const [form, dispatch] = useReducer(authFormReducer, initAuthForm);
 
@@ -57,11 +53,12 @@ const SignInScreen = () => {
     });
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     Keyboard.dismiss();
     if (!form.disabled && !form.isLoding) {
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
-      console.log(form.email, form.password);
+      const user = await signIn(form);
+      console.log(user);
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
     }
   };
