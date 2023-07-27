@@ -23,11 +23,13 @@ import {
   initAuthForm,
 } from '../reducers/authFormReducer';
 import { getAuthErrorMesseages, signIn } from '../api/auth';
+import { useUserState } from '../contexts/UserContext';
 
 const SignInScreen = () => {
   const passwordRef = useRef(); // 이메일 작성 후 '다음'하면 비밀번호 입력하는 곳으로 이동
 
   const [form, dispatch] = useReducer(authFormReducer, initAuthForm);
+  const [, setUser] = useUserState();
 
   const { top, bottom } = useSafeAreaInsets(); // 화면에서 top 높이와 bottom 높이를 가져옴
   const { navigate } = useNavigation(); // 쌓는 느낌...
@@ -60,7 +62,7 @@ const SignInScreen = () => {
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
       try {
         const user = await signIn(form);
-        console.log(user);
+        setUser(user);
       } catch (e) {
         const message = getAuthErrorMesseages(e.code);
         Alert.alert('로그인 실패', message);

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { LogBox, View } from 'react-native';
 import { Asset } from 'expo-asset';
 import { initFirebase } from './api/firebase';
+import { UserProvider } from './contexts/UserContext';
 
 const App = () => {
   LogBox.ignoreLogs(['AsyncStorage has been extracted from react-native core']);
@@ -39,10 +40,12 @@ const App = () => {
   }
 
   return (
-    <View style={{ flex: 1 }} onLayout={onReady}>
-      <StatusBar style={'dark'} />
-      <Navigation />
-    </View>
+    <UserProvider>
+      <View style={{ flex: 1 }} onLayout={onReady}>
+        <StatusBar style={'dark'} />
+        <Navigation />
+      </View>
+    </UserProvider>
   );
 };
 
