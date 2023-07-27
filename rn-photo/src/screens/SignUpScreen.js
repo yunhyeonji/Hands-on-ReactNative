@@ -5,6 +5,7 @@ import {
   Image,
   StatusBar,
   ScrollView,
+  Alert,
 } from 'react-native';
 import Input, { InputTypes, ReturnKeyTypes } from '../components/Input';
 import Button from '../components/Button';
@@ -21,6 +22,8 @@ import {
   authFormReducer,
   initAuthForm,
 } from '../reducers/authFormReducer';
+import { getAuthErrorMesseages, signUp } from '../api/auth';
+import { useUserState } from '../contexts/UserContext';
 
 const SignUpScreen = () => {
   const passwordRef = useRef();
@@ -35,6 +38,7 @@ const SignUpScreen = () => {
 
   const { top, bottom } = useSafeAreaInsets();
   const { navigate } = useNavigation();
+  const [, setUser] = useUserState();
 
   const updateForm = (payload) => {
     const newForm = {
@@ -52,11 +56,17 @@ const SignUpScreen = () => {
     });
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     Keyboard.dismiss();
     if (!form.disabled && !form.isLoding) {
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
-      console.log(form.email, form.password, form.passwordConfirm);
+      try {
+        const user = await signUp(form);
+        setUser(user);
+      } catch (e) {
+        const message = getAuthErrorMesseages(e.code);
+        Alert.alert('회원가입 실패', message);
+      }
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
     }
   };
