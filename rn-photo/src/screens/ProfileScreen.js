@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useUserState } from '../contexts/UserContext';
 import { GRAY, WHITE } from '../colors';
 import { signOut } from '../api/auth';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import FastImage from '../components/FastImage';
 
 const ProfileScreen = () => {
   const [user, setUser] = useUserState();
@@ -34,7 +35,7 @@ const ProfileScreen = () => {
             user.photoURL || { backgroundColor: GRAY.DEFAULT },
           ]}
         >
-          <Image source={{ uri: user.photoURL }} style={styles.photo} />
+          <FastImage source={{ uri: user.photoURL }} style={styles.photo} />
           <Pressable style={styles.editButton} onPress={() => {}}>
             <MaterialCommunityIcons name="pencil" size={20} color={WHITE} />
           </Pressable>
