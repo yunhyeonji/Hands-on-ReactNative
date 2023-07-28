@@ -2,11 +2,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { useUserState } from '../contexts/UserContext';
 import AuthStack from './AuthStack';
-import ContentTab from './ContentTab';
 import { Asset } from 'expo-asset';
 import { initFirebase } from '../api/firebase';
 import * as SplashScreen from 'expo-splash-screen';
 import { onAuthStateChanged } from '../api/auth';
+import MainStack from './MainStack';
 
 const Navigation = () => {
   const [user, setUser] = useUserState();
@@ -50,7 +50,7 @@ const Navigation = () => {
 
   return (
     <NavigationContainer onReady={onReady}>
-      {user.uid ? <ContentTab /> : <AuthStack />}
+      {user.uid ? <MainStack /> : <AuthStack />}
     </NavigationContainer>
   );
 };
