@@ -8,6 +8,9 @@ import {
   updateProfile,
 } from 'firebase/auth';
 
+const PHOTO_URL =
+  'https://firebasestorage.googleapis.com/v0/b/rn-photo-76754.appspot.com/o/profile.png?alt=media';
+
 export const getAuthErrorMesseages = (errorCode) => {
   switch (errorCode) {
     case AuthErrorCodes.USER_DELETED:
@@ -36,6 +39,12 @@ export const signUp = async ({ email, password }) => {
     email,
     password
   );
+
+  await updateUserInfo({
+    displayName: email.split('@')[0].slice(0, 10),
+    photoURL: PHOTO_URL,
+  });
+
   return user;
 };
 
@@ -47,7 +56,7 @@ export const signOut = async () => {
   await signOutFirebase(getAuth());
 };
 
-export const updateUserInfo = async (userInfo) => {
+const updateUserInfo = async (userInfo) => {
   try {
     await updateProfile(getAuth().currentUser, userInfo);
   } catch (e) {
