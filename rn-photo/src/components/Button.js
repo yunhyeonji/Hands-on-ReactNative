@@ -65,9 +65,9 @@ const Button = ({ title, onPress, disabled, isLoding, styles, buttonType }) => {
     </View>
   );
 };
-// Button.defaultProps = {
-//   buttonType: ButtonTypes.PRIMARY,
-// };
+Button.defaultProps = {
+  buttonType: ButtonTypes.PRIMARY,
+};
 
 Button.propTypes = {
   title: PropTypes.string,
