@@ -14,22 +14,11 @@ export const ButtonTypes = {
   CANCEL: 'CANCEL',
 };
 
+// 키와 값이 같을 땐 간단하게 사용가능
 const ButtonTypeColors = {
-  PRIMARY: {
-    DEFAULT: PRIMARY.DEFAULT,
-    LIGHT: PRIMARY.LIGHT,
-    DARK: PRIMARY.DARK,
-  },
-  DANGER: {
-    DEFAULT: DANGER.DEFAULT,
-    LIGHT: DANGER.LIGHT,
-    DARK: DANGER.DARK,
-  },
-  CANCEL: {
-    DEFAULT: GRAY.DEFAULT,
-    LIGHT: GRAY.LIGHT,
-    DARK: GRAY.DARK,
-  },
+  PRIMARY,
+  DANGER,
+  CANCEL: GRAY,
 };
 
 const Button = ({ title, onPress, disabled, isLoding, styles, buttonType }) => {
