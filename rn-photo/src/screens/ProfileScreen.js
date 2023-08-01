@@ -5,18 +5,31 @@ import { signOut } from '../api/auth';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import FastImage from '../components/FastImage';
+import DangerAlert from '../components/DangerAlert';
+import { useState } from 'react';
 
 const ProfileScreen = () => {
   const [user, setUser] = useUserState();
   const { top } = useSafeAreaInsets();
 
+  const [visible, setVisible] = useState(false);
+
   return (
     <View style={[styles.container, { paddingTop: top }]}>
+      <DangerAlert
+        visible={visible}
+        onClose={() => {
+          setVisible(false);
+        }}
+      />
       <View style={styles.settingButton}>
         <Pressable
-          onPress={async () => {
-            signOut();
-            setUser({});
+          // onPress={async () => {
+          //   signOut();
+          //   setUser({});
+          // }}
+          onPress={() => {
+            setVisible(true);
           }}
           hitSlop={10}
         >
