@@ -1,22 +1,26 @@
 import { useNavigation } from '@react-navigation/native';
-import { View, StyleSheet, Button, Pressable, TextInput } from 'react-native';
+import { View, StyleSheet, Pressable, TextInput } from 'react-native';
 import { useUserState } from '../contexts/UserContext';
 import FastImage from '../components/FastImage';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GRAY, WHITE } from '../colors';
+import HeaderRight from '../components/HeaderRight';
+import { useLayoutEffect } from 'react';
 
 const UpdateProfileScreen = () => {
   const navigation = useNavigation();
   const [user] = useUserState();
 
+  useLayoutEffect(() => {
+    // useEffect와 사용하는 방법, 이유는 동일하지만 컴포넌트를 화면에 보여주기 전에 작업을 동기적으로 실행하는 특징이 있음.
+    // 복잡하고 오래걸리는 작업인 경우 화면이 나타나기까지 오랜 시간이 걸린다는 단점이 있음
+    navigation.setOptions({
+      headerRight: () => <HeaderRight onPress={() => console.log('right')} />,
+    });
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
-      <Button
-        title="back"
-        onPress={() => {
-          navigation.goBack();
-        }}
-      />
       <View>
         <FastImage source={{ uri: user.photoURL }} style={styles.photo} />
         <Pressable onPress={() => {}} style={styles.imageButton}>
