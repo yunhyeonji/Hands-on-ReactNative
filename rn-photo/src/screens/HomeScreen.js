@@ -20,7 +20,7 @@ const HomeScreen = () => {
     <View style={[styles.container, { paddingTop: top }]}>
       <View style={styles.topContainer}>
         <Image source={require('../../assets/icon.png')} style={styles.icon} />
-        <Text style={styles.title}>맴맴맴</Text>
+        <Text style={styles.title}>여행일지</Text>
       </View>
 
       <View style={styles.buttonContainer}>
