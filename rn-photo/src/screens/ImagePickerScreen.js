@@ -1,5 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
-import { useEffect, useLayoutEffect, useState, useCallback } from 'react';
+import {
+  useEffect,
+  useLayoutEffect,
+  useState,
+  useCallback,
+  useRef,
+} from 'react';
 import HeaderRight from '../components/HeaderRight';
 import {
   Alert,
@@ -33,7 +39,7 @@ const ImagePickerScreen = () => {
 
   const width = useWindowDimensions().width / 3;
   const [photos, setPhotos] = useState([]);
-  const [listInfo, setListInfo] = useState({
+  const listInfo = useRef({
     endCursor: '',
     hasNextPage: true,
   });
@@ -44,14 +50,18 @@ const ImagePickerScreen = () => {
       first: 30,
       sortBy: [MediaLibrary.SortBy.creationTime],
     };
+    if (listInfo.current.endCursor) {
+      options['after'] = listInfo.current.endCursor;
+    }
 
-    if (listInfo.hasNextPage) {
+    if (listInfo.current.hasNextPage) {
       const { assets, endCursor, hasNextPage } =
         await MediaLibrary.getAssetsAsync(options);
-      setPhotos(assets);
-      setListInfo({ endCursor, hasNextPage });
+      setPhotos((prev) => [...prev, ...assets]);
+      listInfo.current = { endCursor, hasNextPage };
     }
-  }, [listInfo.hasNextPage]);
+  }, []);
+  console.log(photos.length);
 
   // 권한이 true이면 이미지 가져오기
   useEffect(() => {
@@ -81,6 +91,8 @@ const ImagePickerScreen = () => {
         // FlatList 컴포넌트의 한 열에 렌더링하는 양
         // FlatList 컴포넌트를 세로로 사용할 때만 적용 가능
         // 각 항목의 높이가 같아야 함
+        onEndReached={getPhotos}
+        onEndReachedThreshold={0.3}
       />
     </View>
   );
