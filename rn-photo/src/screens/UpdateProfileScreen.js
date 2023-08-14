@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import {
   View,
   StyleSheet,
@@ -20,10 +20,21 @@ import { MainRoutes } from '../navigations/routes';
 const UpdateProfileScreen = () => {
   const navigation = useNavigation();
   const [user, setUser] = useUserState();
+  const { params } = useRoute(); //ImagePickerScreen에서 보내는 이미지를 받음
 
   const [displayName, setDisplayName] = useState(user.displayName);
   const [disabled, setDisabled] = useState(true);
   const [isLoding, setIsLoding] = useState(false);
+  const [photo, setPhoto] = useState({ uri: user.photoURL });
+
+  useEffect(() => {
+    if (params) {
+      const { selectedPhotos } = params;
+      if (selectedPhotos?.length) {
+        setPhoto(selectedPhotos[0]);
+      }
+    }
+  }, [params]);
 
   // useCallback -> 아래 4개의 조건이 모두 수정될 때만(disabled, displayName, navigation, setUser) onSubmit함수가 리렌더링 됨.
   const onSubmit = useCallback(async () => {
@@ -59,7 +70,7 @@ const UpdateProfileScreen = () => {
     <SafeInputView>
       <View style={styles.container}>
         <View>
-          <FastImage source={{ uri: user.photoURL }} style={styles.photo} />
+          <FastImage source={{ uri: photo.uri }} style={styles.photo} />
           <Pressable
             onPress={() => {
               navigation.navigate(MainRoutes.IMAGE_PICKER);
