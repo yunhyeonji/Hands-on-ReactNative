@@ -18,6 +18,11 @@ import {
 } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 
+const initListInfo = {
+  endCursor: '',
+  hasNextPage: true,
+};
+
 const ImagePickerScreen = () => {
   const navigation = useNavigation();
   const [status, requestPermission] = MediaLibrary.usePermissions();
@@ -39,10 +44,17 @@ const ImagePickerScreen = () => {
 
   const width = useWindowDimensions().width / 3;
   const [photos, setPhotos] = useState([]);
-  const listInfo = useRef({
-    endCursor: '',
-    hasNextPage: true,
-  });
+  const listInfo = useRef(initListInfo);
+
+  // 이미지 목록 초기화 하기
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    listInfo.current = initListInfo;
+    await getPhotos();
+    setRefreshing(false);
+  };
 
   //   사진 목록 가져오기
   const getPhotos = useCallback(async () => {
@@ -57,11 +69,10 @@ const ImagePickerScreen = () => {
     if (listInfo.current.hasNextPage) {
       const { assets, endCursor, hasNextPage } =
         await MediaLibrary.getAssetsAsync(options);
-      setPhotos((prev) => [...prev, ...assets]);
+      setPhotos((prev) => (options.after ? [...prev, ...assets] : assets));
       listInfo.current = { endCursor, hasNextPage };
     }
   }, []);
-  console.log(photos.length);
 
   // 권한이 true이면 이미지 가져오기
   useEffect(() => {
@@ -77,6 +88,7 @@ const ImagePickerScreen = () => {
     });
   });
 
+  console.log(photos.length);
   return (
     <View style={styles.container}>
       <FlatList
@@ -93,6 +105,8 @@ const ImagePickerScreen = () => {
         // 각 항목의 높이가 같아야 함
         onEndReached={getPhotos}
         onEndReachedThreshold={0.3}
+        onRefresh={onRefresh}
+        refreshing={refreshing}
       />
     </View>
   );
