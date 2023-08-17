@@ -1,24 +1,19 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import {
-  View,
-  StyleSheet,
-  Pressable,
-  TextInput,
-  Keyboard,
   Alert,
+  Keyboard,
+  Platform,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  View,
 } from 'react-native';
-import { useUserState } from '../contexts/UserContext';
 import FastImage from '../components/FastImage';
+import { useUserState } from '../contexts/UserContext';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GRAY, WHITE } from '../colors';
 import HeaderRight from '../components/HeaderRight';
-import {
-  useEffect,
-  useLayoutEffect,
-  useState,
-  useCallback,
-  Platform,
-} from 'react';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { updateUserInfo } from '../api/auth';
 import SafeInputView from '../components/SafeInputView';
 import { MainRoutes } from '../navigations/routes';
@@ -27,19 +22,19 @@ import { uploadPhoto } from '../api/storage';
 
 const UpdateProfileScreen = () => {
   const navigation = useNavigation();
-  const [user, setUser] = useUserState();
   const { params } = useRoute(); //ImagePickerScreen에서 보내는 이미지를 받음
 
+  const [user, setUser] = useUserState();
+
+  const [photo, setPhoto] = useState({ uri: user.photoURL });
   const [displayName, setDisplayName] = useState(user.displayName);
   const [disabled, setDisabled] = useState(true);
   const [isLoding, setIsLoding] = useState(false);
-  const [photo, setPhoto] = useState({ uri: user.photoURL });
 
   useEffect(() => {
     if (params) {
       const { selectedPhotos } = params;
       if (selectedPhotos?.length) {
-        console.log(selectedPhotos[0]);
         setPhoto(selectedPhotos[0]);
       }
     }
@@ -51,18 +46,20 @@ const UpdateProfileScreen = () => {
     if (!disabled) {
       setIsLoding(true);
       try {
-        const localUri = Platform.select({
-          ios: await getLocalUri(photo.id),
-          android: photo.uri,
-        });
+        const localUri = photo.id
+          ? Platform.select({
+              ios: await getLocalUri(photo.id),
+              android: photo.uri,
+            })
+          : photo.uri;
         const photoURL = await uploadPhoto(localUri);
-        console.log(photoURL);
-        setIsLoding(false);
-        // const userInfo = { displayName };
 
-        // await updateUserInfo(userInfo);
-        // setUser((prev) => ({ ...prev, ...userInfo }));
-        // navigation.goBack();
+        const userInfo = { displayName, photoURL };
+
+        await updateUserInfo(userInfo);
+        setUser((prev) => ({ ...prev, ...userInfo }));
+
+        navigation.goBack();
       } catch (e) {
         Alert.alert('사용자 수정 실패', e.message);
         setIsLoding(false);
@@ -88,27 +85,26 @@ const UpdateProfileScreen = () => {
         <View>
           <FastImage source={{ uri: photo.uri }} style={styles.photo} />
           <Pressable
-            onPress={() => {
-              navigation.navigate(MainRoutes.IMAGE_PICKER);
-            }}
+            onPress={() => navigation.navigate(MainRoutes.IMAGE_PICKER)}
             style={styles.imageButton}
           >
             <MaterialCommunityIcons name="image" size={20} color={WHITE} />
           </Pressable>
         </View>
+
         <View>
           <TextInput
             value={displayName}
             onChangeText={(text) => setDisplayName(text.trim())}
             style={styles.input}
-            placeholder="Nickname"
-            textAlign="center"
+            placeholder={'Nickname'}
+            textAlign={'center'}
             maxLength={10}
-            returnKeyType="done"
-            autoCapitalize="none"
+            returnKeyType={'done'}
+            autoCapitalize={'none'}
             autoCorrect={false}
-            textContentType="none"
-          ></TextInput>
+            textContentType={'none'}
+          />
         </View>
       </View>
     </SafeInputView>
@@ -140,12 +136,12 @@ const styles = StyleSheet.create({
   },
   input: {
     marginTop: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
     width: 200,
     fontSize: 20,
     borderBottomWidth: 0.5,
-    borderBottomColor: GRAY.LIGHT,
+    borderBottomColor: GRAY.DEFAULT,
   },
 });
 
