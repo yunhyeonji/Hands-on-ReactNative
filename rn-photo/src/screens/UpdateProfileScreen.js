@@ -12,10 +12,18 @@ import FastImage from '../components/FastImage';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GRAY, WHITE } from '../colors';
 import HeaderRight from '../components/HeaderRight';
-import { useEffect, useLayoutEffect, useState, useCallback } from 'react';
+import {
+  useEffect,
+  useLayoutEffect,
+  useState,
+  useCallback,
+  Platform,
+} from 'react';
 import { updateUserInfo } from '../api/auth';
 import SafeInputView from '../components/SafeInputView';
 import { MainRoutes } from '../navigations/routes';
+import { getLocalUri } from '../components/ImagePicker';
+import { uploadPhoto } from '../api/storage';
 
 const UpdateProfileScreen = () => {
   const navigation = useNavigation();
@@ -31,6 +39,7 @@ const UpdateProfileScreen = () => {
     if (params) {
       const { selectedPhotos } = params;
       if (selectedPhotos?.length) {
+        console.log(selectedPhotos[0]);
         setPhoto(selectedPhotos[0]);
       }
     }
@@ -42,17 +51,24 @@ const UpdateProfileScreen = () => {
     if (!disabled) {
       setIsLoding(true);
       try {
-        const userInfo = { displayName };
+        const localUri = Platform.select({
+          ios: await getLocalUri(photo.id),
+          android: photo.uri,
+        });
+        const photoURL = await uploadPhoto(localUri);
+        console.log(photoURL);
+        setIsLoding(false);
+        // const userInfo = { displayName };
 
-        await updateUserInfo(userInfo);
-        setUser((prev) => ({ ...prev, ...userInfo }));
-        navigation.goBack();
+        // await updateUserInfo(userInfo);
+        // setUser((prev) => ({ ...prev, ...userInfo }));
+        // navigation.goBack();
       } catch (e) {
         Alert.alert('사용자 수정 실패', e.message);
         setIsLoding(false);
       }
     }
-  }, [disabled, displayName, navigation, setUser]);
+  }, [disabled, displayName, navigation, setUser, photo.id, photo.uri]);
 
   useEffect(() => {
     setDisabled(!displayName || isLoding);
