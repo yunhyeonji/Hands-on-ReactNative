@@ -9,10 +9,8 @@ import {
 } from 'react-native';
 import HeaderRight from '../components/HeaderRight';
 import FastImage from '../components/FastImage';
-import { GRAY, PRIMARY } from '../colors';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { MAP_API_KEY } from '../../env';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { GRAY } from '../colors';
+import LocationSearch from '../components/LocationSearch';
 
 const MAX_TEXT_LENGTH = 60; // 최대 입력 글자 수
 
@@ -26,7 +24,7 @@ const WriteTextScreen = () => {
   const [isLoading, setIsLoading] = useState(false); // loading 중인지 확인
 
   const [text, setText] = useState(''); // 텍스트 입력
-  const [location, setLocation] = useState('');
+  const [location, setLocation] = useState(''); // 위치 저장 변수
 
   const width = useWindowDimensions().width / 4; // 이미지 한 줄에 4장 몰아넣기 위한 변수
 
@@ -61,26 +59,12 @@ const WriteTextScreen = () => {
           />
         ))}
       </View>
-
-      <View style={styles.location}>
-        <GooglePlacesAutocomplete
-          placeholder="location"
-          query={{ key: MAP_API_KEY, language: 'ko' }}
-          onPress={(data) => setLocation(data.description)}
-          onFail={(e) => {
-            // eslint-disable-next-line no-console
-            console.log('GooglePlaceAutocomplete : ', e);
-          }}
-          styles={{ container: { flex: 0 }, textInput: { paddingLeft: 30 } }}
-        />
-        <View style={styles.locationIcon}>
-          <MaterialCommunityIcons
-            name="map-marker"
-            size={20}
-            color={location ? PRIMARY.DEFAULT : GRAY.DARK}
-          />
-        </View>
-      </View>
+      {/* 위치 검색하기 */}
+      <LocationSearch
+        onPress={({ description }) => setLocation(description)}
+        isLoading={isLoading}
+        isSelected={!!location}
+      />
 
       {/* 글 작성 */}
       <View>
@@ -129,17 +113,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     color: GRAY.DARK,
     fontSize: 12,
-  },
-  location: {
-    paddingHorizontal: 20,
-    paddingVertical: 5,
-    borderBottom: 0.5,
-    borderBottomColor: GRAY.LIGHT,
-  },
-  locationIcon: {
-    position: 'absolute',
-    left: 20,
-    top: 16,
   },
 });
 
