@@ -1,0 +1,59 @@
+import { View, StyleSheet, Platform } from 'react-native';
+import Swiper from 'react-native-swiper';
+import { BlurView } from 'expo-blur';
+import PropTypes from 'prop-types';
+import { BLACK, PRIMARY } from '../colors';
+import FastImage from '../components/FastImage';
+
+const ImageSwiper = ({ photos }) => {
+  return (
+    <Swiper
+      loop={false}
+      dot={<View style={styles.dot} />}
+      activeDot={<View style={[styles.dot, styles.activeDot]} />}
+    >
+      {photos.map(({ uri }, idx) => (
+        <View key={idx} style={styles.photo}>
+          <FastImage
+            source={{ uri }}
+            resizeMode={'cover'}
+            style={StyleSheet.absoluteFillObject}
+          />
+          <BlurView intensity={Platform.select({ ios: 10, android: 90 })}>
+            <FastImage
+              source={{ uri }}
+              resizeMode={'contain'}
+              style={styles.photo}
+            />
+          </BlurView>
+        </View>
+      ))}
+    </Swiper>
+  );
+};
+
+ImageSwiper.propTypes = {
+  photos: PropTypes.array.isRequired,
+};
+
+const styles = StyleSheet.create({
+  photo: {
+    width: '100%',
+    height: '100%',
+  },
+  dot: {
+    backgroundColor: BLACK,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginLeft: 3,
+    marginRight: 3,
+    marginTop: 3,
+    marginBottom: 3,
+  },
+  activeDot: {
+    backgroundColor: PRIMARY.DEFAULT,
+  },
+});
+
+export default ImageSwiper;
