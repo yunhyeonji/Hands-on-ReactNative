@@ -56,7 +56,7 @@ const SelectPhotosScreen = () => {
             })
           )
         );
-        navigation.navigate(MainRoutes.WRITE_TEXT, { photoUris });
+        navigation.replace(MainRoutes.WRITE_TEXT, { photoUris });
       } catch (e) {
         Alert.alert('사진 정보 조회 실패', e.message);
       }

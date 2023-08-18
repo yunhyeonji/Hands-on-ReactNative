@@ -71,6 +71,18 @@ const WriteTextScreen = () => {
           autoCorrect={false}
           textContentType="none"
           keyboardAppearance="light"
+          multiline={true}
+          blurOnSubmit={true}
+          /*
+           * blurOnSubmit={true}
+           * - onSubmitEditing 호출 + 키보드 사라짐
+           * blurOnSubmit={false}
+           * - onSubmitEditing 호출
+           *
+           * multiline={true}로 설정시 blurOnSubmit 기본값이 false
+           * multiline={false}로 설정시 blurOnSubmit 기본값이 true
+           */
+          editable={!isLoading}
         />
         <Text style={styles.inputLength}>
           {text.length} / {MAX_TEXT_LENGTH}
