@@ -6,11 +6,14 @@ import {
   useWindowDimensions,
   TextInput,
   Text,
+  Alert,
 } from 'react-native';
 import HeaderRight from '../components/HeaderRight';
 import FastImage from '../components/FastImage';
 import { GRAY } from '../colors';
 import LocationSearch from '../components/LocationSearch';
+import { uploadPhoto } from '../api/storage';
+import { createPost } from '../api/post';
 
 const MAX_TEXT_LENGTH = 60; // 최대 입력 글자 수
 
@@ -28,10 +31,23 @@ const WriteTextScreen = () => {
 
   const width = useWindowDimensions().width / 4; // 이미지 한 줄에 4장 몰아넣기 위한 변수
 
-  const onSubmit = useCallback(() => {
-    setDisabled(false);
+  const onSubmit = useCallback(async () => {
     setIsLoading(true);
-  }, []);
+    try {
+      const photos = await Promise.all(
+        photoUris.map((uri) => uploadPhoto(uri))
+      );
+      await createPost({ photos, location, text });
+      navigation.goBack();
+    } catch (e) {
+      Alert.alert('글 작성 실패', e.message, [
+        {
+          text: '확인',
+          onPress: () => setIsLoading(false),
+        },
+      ]);
+    }
+  }, [location, text, photoUris, navigation]);
 
   useEffect(() => {
     setPhotoUris(params?.photoUris ?? []);
