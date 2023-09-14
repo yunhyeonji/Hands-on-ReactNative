@@ -1,9 +1,10 @@
 import { FlatList, StyleSheet, View } from 'react-native';
-import PropTypes from 'prop-types';
 import PostItem from './PostItem';
 import { GRAY } from '../colors';
+import usePosts from '../hooks/usePosts';
 
-const PostList = ({ data, fetchNextPage, refreshing, refetch }) => {
+const PostList = () => {
+  const { data, fetchNextPage, refetching, refetch } = usePosts();
   return (
     <FlatList
       data={data}
@@ -12,16 +13,9 @@ const PostList = ({ data, fetchNextPage, refreshing, refetch }) => {
       onEndReached={fetchNextPage}
       onEndReachedThreshold={0.4}
       onRefresh={refetch}
-      refreshing={refreshing}
+      refreshing={refetching}
     />
   );
-};
-
-PostList.propTypes = {
-  data: PropTypes.array.isRequired,
-  fetchNextPage: PropTypes.func,
-  refreshing: PropTypes.bool,
-  refetch: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
