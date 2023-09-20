@@ -9,6 +9,7 @@ import {
   query,
   setDoc,
   startAfter,
+  where,
 } from 'firebase/firestore';
 
 export const createPost = async ({ photos, location, text }) => {
@@ -26,16 +27,39 @@ export const createPost = async ({ photos, location, text }) => {
   });
 };
 
-export const getPosts = async ({ after }) => {
+const getOption = ({ after, isMine }) => {
   const collectionRef = collection(getFirestore(), 'posts');
-  const options = after
-    ? query(
-        collectionRef,
-        orderBy('createdTs', 'desc'),
-        startAfter(after),
-        limit(10)
-      )
-    : query(collectionRef, orderBy('createdTs', 'desc'), limit(10));
+  const uid = getAuth().currentUser.uid;
+
+  if (isMine) {
+    return after
+      ? query(
+          collectionRef,
+          where('user.uid', '==', uid),
+          orderBy('createdTs', 'desc'),
+          startAfter(after),
+          limit(10)
+        )
+      : query(
+          collectionRef,
+          where('user.uid', '==', uid),
+          orderBy('createdTs', 'desc'),
+          limit(10)
+        );
+  } else {
+    return after
+      ? query(
+          collectionRef,
+          orderBy('createdTs', 'desc'),
+          startAfter(after),
+          limit(10)
+        )
+      : query(collectionRef, orderBy('createdTs', 'desc'), limit(10));
+  }
+};
+
+export const getPosts = async ({ after, isMine }) => {
+  const options = getOption({ after, isMine });
   const documentSnapshot = await getDocs(options);
   const list = documentSnapshot.docs.map((doc) => doc.data());
   const last = documentSnapshot.docs[documentSnapshot.docs.length - 1];
