@@ -9,18 +9,18 @@ const usePosts = () => {
   const isLoadingRef = useRef(false);
 
   const fetchNextPage = async () => {
-    if (!isLoadingRef.currnet) {
-      isLoadingRef.currnet = true;
+    if (!isLoadingRef.current) {
+      isLoadingRef.current = true;
       const { list, last } = await getPosts({ after: lastRef.current });
       setData((prev) => (lastRef.current ? [...prev, ...list] : list));
       lastRef.current = last;
-      isLoadingRef.currnet = false;
+      isLoadingRef.current = false;
     }
   };
 
   const refetch = async () => {
     setRefetching(true);
-    lastRef.currnet = null;
+    lastRef.current = null;
     await fetchNextPage();
     setRefetching(false);
   };

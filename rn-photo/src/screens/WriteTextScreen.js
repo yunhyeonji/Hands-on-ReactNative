@@ -1,35 +1,42 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import {
-  View,
-  StyleSheet,
-  useWindowDimensions,
-  TextInput,
-  Text,
   Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  useWindowDimensions,
+  View,
 } from 'react-native';
-import HeaderRight from '../components/HeaderRight';
-import FastImage from '../components/FastImage';
-import { GRAY } from '../colors';
-import LocationSearch from '../components/LocationSearch';
-import { uploadPhoto } from '../api/storage';
 import { createPost } from '../api/post';
+import { uploadPhoto } from '../api/storage';
+import { GRAY } from '../colors';
+import FastImage from '../components/FastImage';
+import HeaderRight from '../components/HeaderRight';
+import LocationSearch from '../components/LocationSearch';
+import event, { EventTypes } from '../event';
 
-const MAX_TEXT_LENGTH = 60; // 최대 입력 글자 수
+const MAX_TEXT_LENGTH = 60;
 
 const WriteTextScreen = () => {
-  const navigation = useNavigation(); // 화면 이동
+  const navigation = useNavigation();
+  const { params } = useRoute();
+  const width = useWindowDimensions().width / 4;
 
-  const { params } = useRoute(); // 현재 라우트의 데이터 값 가져오기
-  const [photoUris, setPhotoUris] = useState([]); // 이미지 uri가져오기
+  const [photoUris, setPhotoUris] = useState([]);
+  const [text, setText] = useState('');
+  const [location, setLocation] = useState('');
 
-  const [disabled, setDisabled] = useState(true); // 사용가능한지 확인
-  const [isLoading, setIsLoading] = useState(false); // loading 중인지 확인
+  const [disabled, setDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [text, setText] = useState(''); // 텍스트 입력
-  const [location, setLocation] = useState(''); // 위치 저장 변수
+  useEffect(() => {
+    setDisabled(isLoading || !text);
+  }, [text, isLoading]);
 
-  const width = useWindowDimensions().width / 4; // 이미지 한 줄에 4장 몰아넣기 위한 변수
+  useEffect(() => {
+    setPhotoUris(params?.photoUris ?? []);
+  }, [params?.photoUris]);
 
   const onSubmit = useCallback(async () => {
     setIsLoading(true);
@@ -37,7 +44,10 @@ const WriteTextScreen = () => {
       const photos = await Promise.all(
         photoUris.map((uri) => uploadPhoto(uri))
       );
+
       await createPost({ photos, location, text });
+      event.emit(EventTypes.REFRESH);
+
       navigation.goBack();
     } catch (e) {
       Alert.alert('글 작성 실패', e.message, [
@@ -47,25 +57,16 @@ const WriteTextScreen = () => {
         },
       ]);
     }
-  }, [location, text, photoUris, navigation]);
-
-  useEffect(() => {
-    setPhotoUris(params?.photoUris ?? []);
-  }, [params?.photoUris]);
-
-  useEffect(() => {
-    setDisabled(isLoading || !text);
-  }, [isLoading, text]);
+  }, [location, photoUris, text, navigation]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => <HeaderRight disabled={disabled} onPress={onSubmit} />,
     });
-  }, [disabled, onSubmit, navigation]);
+  }, [onSubmit, disabled, navigation]);
 
   return (
     <View style={styles.container}>
-      {/* 사진보이기 */}
       <View style={{ flexDirection: 'row' }}>
         {photoUris.map((uri, idx) => (
           <FastImage
@@ -75,37 +76,27 @@ const WriteTextScreen = () => {
           />
         ))}
       </View>
-      {/* 위치 검색하기 */}
+
       <LocationSearch
         onPress={({ description }) => setLocation(description)}
         isLoading={isLoading}
         isSelected={!!location}
       />
 
-      {/* 글 작성 */}
       <View>
         <TextInput
           value={text}
           onChangeText={(text) => setText(text)}
           style={styles.input}
-          placeholder="사진의 설명을 작성하세요"
+          placeholder={'사진의 설명을 작성하세요.'}
           maxLength={MAX_TEXT_LENGTH}
-          returnKeyType="done"
-          autoCapitalize="none"
+          returnKeyType={'done'}
+          autoCapitalize={'none'}
           autoCorrect={false}
-          textContentType="none"
-          keyboardAppearance="light"
+          textContentType={'none'}
+          keyboardAppearance={'light'}
           multiline={true}
           blurOnSubmit={true}
-          /*
-           * blurOnSubmit={true}
-           * - onSubmitEditing 호출 + 키보드 사라짐
-           * blurOnSubmit={false}
-           * - onSubmitEditing 호출
-           *
-           * multiline={true}로 설정시 blurOnSubmit 기본값이 false
-           * multiline={false}로 설정시 blurOnSubmit 기본값이 true
-           */
           editable={!isLoading}
         />
         <Text style={styles.inputLength}>

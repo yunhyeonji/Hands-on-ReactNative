@@ -43,7 +43,7 @@ const defaultStyles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     paddingVertical: 5,
-    borderBottom: 0.5,
+    borderBottomWidth: 0.5,
     borderBottomColor: GRAY.LIGHT,
   },
   icon: {
