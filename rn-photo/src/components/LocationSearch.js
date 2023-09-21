@@ -4,33 +4,38 @@ import { GRAY, PRIMARY } from '../colors';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { MAP_API_KEY } from '../../env';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { forwardRef } from 'react';
 
-const LocationSearch = ({ styles, onPress, isLoading, isSelected }) => {
-  return (
-    <View style={[defaultStyles.container, styles?.container]}>
-      <GooglePlacesAutocomplete
-        placeholder="location"
-        query={{ key: MAP_API_KEY, language: 'ko' }}
-        onPress={onPress}
-        onFail={(e) => {
-          // eslint-disable-next-line no-console
-          console.log('GooglePlaceAutocomplete : ', e);
-        }}
-        styles={{ container: { flex: 0 }, textInput: { paddingLeft: 30 } }}
-        debounce={400}
-        enablePoweredByContainer={false}
-        textInputProps={{ editable: !isLoading }}
-      />
-      <View style={[defaultStyles.icon, styles?.icon]}>
-        <MaterialCommunityIcons
-          name="map-marker"
-          size={20}
-          color={isSelected ? PRIMARY.DEFAULT : GRAY.DARK}
+const LocationSearch = forwardRef(
+  ({ styles, onPress, isLoading, isSelected }, ref) => {
+    return (
+      <View style={[defaultStyles.container, styles?.container]}>
+        <GooglePlacesAutocomplete
+          ref={ref}
+          placeholder="location"
+          query={{ key: MAP_API_KEY, language: 'ko' }}
+          onPress={onPress}
+          onFail={(e) => {
+            // eslint-disable-next-line no-console
+            console.log('GooglePlaceAutocomplete : ', e);
+          }}
+          styles={{ container: { flex: 0 }, textInput: { paddingLeft: 30 } }}
+          debounce={400}
+          enablePoweredByContainer={false}
+          textInputProps={{ editable: !isLoading }}
         />
+        <View style={[defaultStyles.icon, styles?.icon]}>
+          <MaterialCommunityIcons
+            name="map-marker"
+            size={20}
+            color={isSelected ? PRIMARY.DEFAULT : GRAY.DARK}
+          />
+        </View>
       </View>
-    </View>
-  );
-};
+    );
+  }
+);
+LocationSearch.displayName = 'LocationSearch';
 
 LocationSearch.propTypes = {
   styles: PropTypes.object,

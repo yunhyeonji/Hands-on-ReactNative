@@ -17,6 +17,8 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import DangerAlert, { AlertTypes } from './DangerAlert';
 import { deletePost } from '../api/post';
 import event, { EventTypes } from '../event';
+import { useNavigation } from '@react-navigation/native';
+import { MainRoutes } from '../navigations/routes';
 
 const ActionSheetOptions = {
   options: ['삭제', '수정', '취소'],
@@ -26,6 +28,7 @@ const ActionSheetOptions = {
 const PostItem = memo(({ post }) => {
   const width = useWindowDimensions().width;
   const [user] = useUserState();
+  const navigation = useNavigation();
 
   const { showActionSheetWithOptions } = useActionSheet();
   const [visible, setVisible] = useState(false);
@@ -36,6 +39,7 @@ const PostItem = memo(({ post }) => {
       setVisible(true);
     } else if (idx === 1) {
       // '수정'을 클릭했을때 할 내용
+      navigation.navigate(MainRoutes.WRITE_TEXT, { post });
     }
   };
   const onClose = () => setVisible(false);
