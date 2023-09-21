@@ -4,15 +4,19 @@ import {
   StyleSheet,
   useWindowDimensions,
   Pressable,
+  Alert,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import ImageSwiper from './ImageSwiper';
 import FastImage from './FastImage';
 import { GRAY, PRIMARY, WHITE } from '../colors';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useUserState } from '../contexts/UserContext';
 import { useActionSheet } from '@expo/react-native-action-sheet';
+import DangerAlert, { AlertTypes } from './DangerAlert';
+import { deletePost } from '../api/post';
+import event, { EventTypes } from '../event';
 
 const ActionSheetOptions = {
   options: ['삭제', '수정', '취소'],
@@ -24,63 +28,86 @@ const PostItem = memo(({ post }) => {
   const [user] = useUserState();
 
   const { showActionSheetWithOptions } = useActionSheet();
+  const [visible, setVisible] = useState(false);
+
   const onPressActionSheet = (idx) => {
     if (idx === 0) {
       // '삭제'버튼을 클릭했을때 할 내용
+      setVisible(true);
     } else if (idx === 1) {
       // '수정'을 클릭했을때 할 내용
     }
   };
+  const onClose = () => setVisible(false);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.profile}>
-          {/* USER */}
-          <FastImage
-            source={{ uri: post.user.photoURL }}
-            style={styles.profilePhoto}
-          />
-          <Text style={styles.nickname}>
-            {post.user.displayName ?? 'nickname'}
-          </Text>
-        </View>
-        {post.user.uid === user.uid && (
-          <Pressable
-            hitSlop={10}
-            onPress={() =>
-              showActionSheetWithOptions(ActionSheetOptions, onPressActionSheet)
-            }
-          >
-            <MaterialCommunityIcons
-              name="dots-horizontal"
-              size={24}
-              color={GRAY.DARK}
+    <>
+      <DangerAlert
+        alertType={AlertTypes.DELETE_POST}
+        visible={visible}
+        onClose={onClose}
+        onConfirm={async () => {
+          try {
+            await deletePost(post.id);
+            event.emit(EventTypes.DELETE, { id: post.id });
+          } catch (e) {
+            Alert.alert('글 삭제에 실패하였습니다.');
+            onClose();
+          }
+        }}
+      />
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <View style={styles.profile}>
+            {/* USER */}
+            <FastImage
+              source={{ uri: post.user.photoURL }}
+              style={styles.profilePhoto}
             />
-          </Pressable>
-        )}
-      </View>
+            <Text style={styles.nickname}>
+              {post.user.displayName ?? 'nickname'}
+            </Text>
+          </View>
+          {post.user.uid === user.uid && (
+            <Pressable
+              hitSlop={10}
+              onPress={() =>
+                showActionSheetWithOptions(
+                  ActionSheetOptions,
+                  onPressActionSheet
+                )
+              }
+            >
+              <MaterialCommunityIcons
+                name="dots-horizontal"
+                size={24}
+                color={GRAY.DARK}
+              />
+            </Pressable>
+          )}
+        </View>
 
-      <View style={{ width, height: width }}>
-        {/* PHOTOS */}
-        <ImageSwiper photos={post.photos} />
-      </View>
+        <View style={{ width, height: width }}>
+          {/* PHOTOS */}
+          <ImageSwiper photos={post.photos} />
+        </View>
 
-      <View style={styles.location}>
-        {/* LOCATION */}
-        <MaterialCommunityIcons
-          name="map-marker"
-          size={24}
-          color={PRIMARY.DEFAULT}
-        />
-        <Text>{post.location}</Text>
-      </View>
+        <View style={styles.location}>
+          {/* LOCATION */}
+          <MaterialCommunityIcons
+            name="map-marker"
+            size={24}
+            color={PRIMARY.DEFAULT}
+          />
+          <Text>{post.location}</Text>
+        </View>
 
-      <Text style={styles.text}>
-        {/* TEXT */}
-        {post.text}
-      </Text>
-    </View>
+        <Text style={styles.text}>
+          {/* TEXT */}
+          {post.text}
+        </Text>
+      </View>
+    </>
   );
 });
 PostItem.displayName = 'PostItem';
