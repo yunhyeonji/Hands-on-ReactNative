@@ -2,8 +2,23 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./screens/HomeScreen";
 import DetailScreen from "./screens/DetailScreen";
-
+import { Text, TouchableOpacity, View } from "react-native";
+import NaverView from "./webapp/NaverView";
 const Stack = createNativeStackNavigator();
+
+const headerLeft = ({ onPress }) => (
+  <TouchableOpacity onPress={onPress}>
+    <Text>Left</Text>
+  </TouchableOpacity>
+);
+
+const headerRight = () => <Text>Right</Text>;
+
+const headerTitle = ({ children }) => (
+  <View>
+    <Text>{children}</Text>
+  </View>
+);
 
 const Navigations = () => {
   return (
@@ -29,7 +44,20 @@ const Navigations = () => {
         <Stack.Screen
           name="Detail"
           component={DetailScreen}
-          options={({ route }) => ({ title: `상세정보 - ${route.params?.id}` })}
+          options={({ route }) => ({
+            title: `상세정보 - ${route.params?.id}`,
+            headerBackVisible: false,
+            headerLeft,
+            headerTitle,
+            headerRight,
+          })}
+        />
+        <Stack.Screen
+          name="Naver"
+          component={NaverView}
+          options={{
+            title: `네이버 웹뷰`,
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

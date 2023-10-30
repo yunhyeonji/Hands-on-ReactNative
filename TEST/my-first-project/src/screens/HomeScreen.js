@@ -22,6 +22,12 @@ const HomeScreen = ({ navigation }) => {
           navigation.navigate("Detail", { id: 3 });
         }}
       />
+      <Button
+        title="네이버"
+        onPress={() => {
+          navigation.navigate("Naver");
+        }}
+      />
     </View>
   );
 };
