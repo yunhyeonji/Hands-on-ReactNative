@@ -28,6 +28,12 @@ const HomeScreen = ({ navigation }) => {
           navigation.navigate("Naver");
         }}
       />
+      <Button
+        title="테스트"
+        onPress={() => {
+          navigation.navigate("Test");
+        }}
+      />
     </View>
   );
 };

@@ -4,6 +4,8 @@ import HomeScreen from "./screens/HomeScreen";
 import DetailScreen from "./screens/DetailScreen";
 import { Text, TouchableOpacity, View } from "react-native";
 import NaverView from "./webapp/NaverView";
+import TestView from "./webapp/TestView";
+
 const Stack = createNativeStackNavigator();
 
 const headerLeft = ({ onPress }) => (
@@ -57,6 +59,13 @@ const Navigations = () => {
           component={NaverView}
           options={{
             title: `네이버 웹뷰`,
+          }}
+        />
+        <Stack.Screen
+          name="Test"
+          component={TestView}
+          options={{
+            title: `테스트 웹뷰`,
           }}
         />
       </Stack.Navigator>

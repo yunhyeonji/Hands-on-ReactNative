@@ -21,7 +21,8 @@
         "backgroundColor": "#ffffff"
       },
       "usesCleartextTraffic": true,
-      "package": "com.yunhj.myfirstproject"
+      "package": "com.yunhj.myfirstproject",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -37,7 +38,10 @@
         {
           "android": { "usesCleartextTraffic": true },
           "ios": {}
-        }
+        },
+        "@react-native-firebase/app",
+        "@react-native-firebase/perf",
+        "@react-native-firebase/crashlytics"
       ]
     ]
   }
