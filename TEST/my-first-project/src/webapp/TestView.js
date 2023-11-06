@@ -1,33 +1,27 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { WebView } from "react-native-webview";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, View } from "react-native";
 
-export default function TestView({ navigation, route }) {
-  console.log(route);
+export default function TestView({ navigation }) {
+  const webViewRef = useRef(null);
 
   // 웹뷰에서 이벤트 받기
   onWebviewMessage = (e) => {
     console.log(e.nativeEvent.data);
-    navigation.navigate("Naver");
+    navigation.navigate(e.nativeEvent.data);
   };
-
-  //웹뷰에 이벤트 보내기
-  changeBackgroundColor = () => {
-    const backgroundColor = "blue";
-
-    this.webview.injectJavaScript(
-      `document.getElementById('myBox2').style.backgroundColor = '${backgroundColor}';
-      window.alert('입력창');`
-    );
+  // 웹뷰로 이벤트 보내기
+  postWebviewMessage = () => {
+    webViewRef.current.postMessage("업데이트 하세요");
   };
 
   return (
     <View style={{ flex: 1 }}>
-      <Button title="배경색 변경" onPress={this.changeBackgroundColor} />
+      <Button title="배경색 변경" onPress={postWebviewMessage} />
       <WebView
-        ref={(ref) => (this.webview = ref)}
+        ref={webViewRef}
         style={styles.container}
-        source={{ uri: "http://172.20.14.69:8080" }}
+        source={{ uri: "http://172.20.14.69:3000/react-2022-tutorial-src" }}
         onMessage={this.onWebviewMessage}
       />
     </View>
