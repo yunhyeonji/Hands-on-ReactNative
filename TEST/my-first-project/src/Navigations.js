@@ -5,11 +5,12 @@ import DetailScreen from "./screens/DetailScreen";
 import { Text, TouchableOpacity, View } from "react-native";
 import NaverView from "./webapp/NaverView";
 import TestView from "./webapp/TestView";
+import React from "react";
 
 const Stack = createNativeStackNavigator();
 
-const headerLeft = ({ onPress }) => (
-  <TouchableOpacity onPress={onPress}>
+const headerLeft = () => (
+  <TouchableOpacity onPress={() => {}}>
     <Text>Left</Text>
   </TouchableOpacity>
 );
@@ -64,9 +65,12 @@ const Navigations = () => {
         <Stack.Screen
           name="Test"
           component={TestView}
-          options={{
+          options={({ route }) => ({
             title: `테스트 웹뷰`,
-          }}
+            headerBackVisible: false,
+            headerLeft,
+            backgroundColor: route.params?.backgroundColor,
+          })}
         />
       </Stack.Navigator>
     </NavigationContainer>
