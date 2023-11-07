@@ -6,6 +6,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 import NaverView from "./webapp/NaverView";
 import TestView from "./webapp/TestView";
 import React from "react";
+import DanuView from "./webapp/DanuView";
 
 const Stack = createNativeStackNavigator();
 
@@ -50,6 +51,13 @@ const Navigations = () => {
           component={NaverView}
           options={{
             title: `네이버 웹뷰`,
+          }}
+        />
+        <Stack.Screen
+          name="Danu"
+          component={DanuView}
+          options={{
+            title: `다누시스 홈페이지`,
           }}
         />
         <Stack.Screen

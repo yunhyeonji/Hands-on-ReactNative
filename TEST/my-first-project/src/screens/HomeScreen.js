@@ -17,13 +17,13 @@ const HomeScreen = ({ navigation }) => {
         }}
       />
       <Button
-        title="Detail 3 열기"
+        title="전화 기능 설정"
         onPress={() => {
           navigation.navigate("Detail", { id: 3 });
         }}
       />
       <Button
-        title="네이버"
+        title="네이버 웹뷰"
         onPress={() => {
           navigation.navigate("Naver");
         }}
