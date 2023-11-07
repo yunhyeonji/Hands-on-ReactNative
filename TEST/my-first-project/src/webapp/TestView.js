@@ -10,7 +10,7 @@ export default function TestView({ navigation }) {
   // 흔들기 이벤트 핸들링
   useEffect(() => {
     const subscription = DeviceMotion.addListener((data) => {
-      if (data.acceleration && data.acceleration.x > 10) {
+      if (data.acceleration && data.acceleration.x > 40) {
         console.log("기기가 흔들렸습니다!");
         // 이전 상태를 기반으로 업데이트
         setShakeCount((prevCount) => {
