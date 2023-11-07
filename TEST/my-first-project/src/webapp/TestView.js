@@ -1,18 +1,29 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { WebView } from "react-native-webview";
 import { Button, StyleSheet, View } from "react-native";
 import { DeviceMotion } from "expo-sensors";
 
 export default function TestView({ navigation }) {
   const webViewRef = useRef(null);
+  const [shakeCount, setShakeCount] = useState(0);
 
-  // 흔들기 기능
+  // 흔들기 이벤트 핸들링
   useEffect(() => {
     const subscription = DeviceMotion.addListener((data) => {
-      // 여기서 흔들기 이벤트를 처리
       if (data.acceleration && data.acceleration.x > 10) {
-        // 흔들기 이벤트가 발생하면 원하는 동작 수행
         console.log("기기가 흔들렸습니다!");
+        // 이전 상태를 기반으로 업데이트
+        setShakeCount((prevCount) => {
+          const newCount = prevCount + 1;
+
+          if (newCount >= 5) {
+            postWebviewMessage("흔들기를 감지했습니다.");
+            console.log("기기가 흔들렸습니다!", newCount);
+            return 0; // 4번 흔들면 카운트를 리셋
+          }
+
+          return newCount;
+        });
       }
     });
 
@@ -27,13 +38,17 @@ export default function TestView({ navigation }) {
     navigation.navigate(e.nativeEvent.data);
   };
   // 웹뷰로 이벤트 보내기
-  postWebviewMessage = () => {
-    webViewRef.current.postMessage("업데이트 하세요");
+  postWebviewMessage = (message) => {
+    // webViewRef.current.postMessage("네이티브에서 이벤트 보냅니다.");
+    webViewRef.current.postMessage(message);
   };
 
   return (
     <View style={{ flex: 1 }}>
-      <Button title="배경색 변경" onPress={postWebviewMessage} />
+      <Button
+        title="앱단에서 이벤트보내기"
+        onPress={() => postWebviewMessage("네이티브에서 이벤트 보냅니다.")}
+      />
       <WebView
         ref={webViewRef}
         style={styles.container}

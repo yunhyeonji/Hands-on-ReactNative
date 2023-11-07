@@ -9,14 +9,6 @@ import React from "react";
 
 const Stack = createNativeStackNavigator();
 
-const headerLeft = () => (
-  <TouchableOpacity onPress={() => {}}>
-    <Text>Left</Text>
-  </TouchableOpacity>
-);
-
-const headerRight = () => <Text>Right</Text>;
-
 const headerTitle = ({ children }) => (
   <View>
     <Text>{children}</Text>
@@ -50,9 +42,7 @@ const Navigations = () => {
           options={({ route }) => ({
             title: `상세정보 - ${route.params?.id}`,
             headerBackVisible: false,
-            headerLeft,
             headerTitle,
-            headerRight,
           })}
         />
         <Stack.Screen
@@ -67,8 +57,6 @@ const Navigations = () => {
           component={TestView}
           options={({ route }) => ({
             title: `테스트 웹뷰`,
-            headerBackVisible: false,
-            headerLeft,
             backgroundColor: route.params?.backgroundColor,
           })}
         />
