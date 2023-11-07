@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./screens/HomeScreen";
 import DetailScreen from "./screens/DetailScreen";
 import ContactScreen from "./screens/ContactScreen";
+import FlashScreen from "./screens/FlashScreen";
 import { Text, View } from "react-native";
 import NaverView from "./webapp/NaverView";
 import TestView from "./webapp/TestView";
@@ -75,6 +76,13 @@ const Navigations = () => {
             title: `테스트 웹뷰`,
             backgroundColor: route.params?.backgroundColor,
           })}
+        />
+        <Stack.Screen
+          name="Flash"
+          component={FlashScreen}
+          options={{
+            title: `후레쉬`,
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

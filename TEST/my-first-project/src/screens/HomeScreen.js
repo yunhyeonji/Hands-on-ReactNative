@@ -37,6 +37,12 @@ const HomeScreen = ({ navigation }) => {
           navigation.navigate("Test");
         }}
       />
+      <Button
+        title="후레쉬"
+        onPress={() => {
+          navigation.navigate("Flash");
+        }}
+      />
     </View>
   );
 };

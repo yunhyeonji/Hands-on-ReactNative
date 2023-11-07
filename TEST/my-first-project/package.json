@@ -22,7 +22,8 @@
     "react-native-webview": "13.2.2",
     "expo-sensors": "~12.3.0",
     "expo-permissions": "~14.2.1",
-    "expo-contacts": "~12.2.0"
+    "expo-contacts": "~12.2.0",
+    "expo-camera": "~13.4.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
