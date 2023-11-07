@@ -3,9 +3,13 @@ import { WebView } from "react-native-webview";
 import { Button, StyleSheet, View } from "react-native";
 import { DeviceMotion } from "expo-sensors";
 
-export default function TestView({ navigation }) {
+export default function TestView({ route, navigation }) {
   const webViewRef = useRef(null);
   const [shakeCount, setShakeCount] = useState(0);
+  const phoneNumber = route.params?.phoneNumber;
+  if (phoneNumber) {
+    postWebviewMessage("선택한 전화번호는 " + phoneNumber + "입니다.");
+  }
 
   // 흔들기 이벤트 핸들링
   useEffect(() => {

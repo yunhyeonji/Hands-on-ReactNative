@@ -1,9 +1,11 @@
 import React from "react";
 import { View, Text, Linking, TouchableOpacity } from "react-native";
 import * as Contacts from "expo-contacts";
+import { useNavigation } from "@react-navigation/native";
 
 export default function App() {
   const [contacts, setContacts] = React.useState([]);
+  const navigation = useNavigation();
 
   React.useEffect(() => {
     getContactsAsync();
@@ -28,18 +30,43 @@ export default function App() {
     Linking.openURL(url);
   };
 
+  const handleContactClick = (contact) => {
+    // Navigate to another screen with the contact's phone number.
+    navigation.navigate("Test", {
+      phoneNumber: contact.phoneNumbers[0].number,
+    });
+  };
+
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       {contacts.map((contact) => (
-        <TouchableOpacity
+        <View
           key={contact.id}
-          style={{ padding: 30 }}
-          onPress={() => handleCall(contact.phoneNumbers[0].number)}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            padding: 30,
+          }}
         >
-          <Text>
-            {contact.name} - {contact.phoneNumbers[0].number}
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleContactClick(contact)}>
+            <Text style={{ marginRight: 10 }}>
+              {contact.name} - {contact.phoneNumbers[0].number}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => handleCall(contact.phoneNumbers[0].number)}
+          >
+            <Text style={{ color: "blue", textDecorationLine: "underline" }}>
+              CALL
+            </Text>
+          </TouchableOpacity>
+        </View>
       ))}
     </View>
   );
