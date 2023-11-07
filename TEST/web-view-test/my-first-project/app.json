@@ -1,0 +1,56 @@
+{
+  "expo": {
+    "name": "my-first-project",
+    "slug": "my-first-project",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "usesCleartextTraffic": true,
+      "package": "com.yunhj.myfirstproject",
+      "config": { "googleServicesFile": "./google-services.json" },
+      "permissions": [],
+      "intentFilters": [
+        {
+          "action": "VOLUME_UP",
+          "category": ["DEFAULT", "BROWSABLE"]
+        },
+        {
+          "action": "VOLUME_DOWN",
+          "category": ["DEFAULT", "BROWSABLE"]
+        }
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3a6abc6b-8585-4f0c-b4a3-7167809820e4"
+      }
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": { "usesCleartextTraffic": true },
+          "ios": {}
+        }
+      ]
+    ]
+  }
+}
