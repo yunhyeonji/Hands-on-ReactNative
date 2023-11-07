@@ -38,7 +38,7 @@ const HomeScreen = ({ navigation }) => {
         }}
       />
       <Button
-        title="후레쉬"
+        title="플래시"
         onPress={() => {
           navigation.navigate("Flash");
         }}

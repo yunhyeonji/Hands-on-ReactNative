@@ -71,7 +71,7 @@ const Navigations = () => {
           name="Flash"
           component={FlashScreen}
           options={{
-            title: `후레쉬`,
+            title: `플래시`,
           }}
         />
       </Stack.Navigator>
