@@ -19,7 +19,7 @@ const HomeScreen = ({ navigation }) => {
       <Button
         title="전화 기능 설정"
         onPress={() => {
-          navigation.navigate("Detail", { id: 3 });
+          navigation.navigate("contact");
         }}
       />
       <Button

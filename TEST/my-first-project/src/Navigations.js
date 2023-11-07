@@ -2,7 +2,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./screens/HomeScreen";
 import DetailScreen from "./screens/DetailScreen";
-import { Text, TouchableOpacity, View } from "react-native";
+import ContactScreen from "./screens/ContactScreen";
+import { Text, View } from "react-native";
 import NaverView from "./webapp/NaverView";
 import TestView from "./webapp/TestView";
 import React from "react";
@@ -45,6 +46,13 @@ const Navigations = () => {
             headerBackVisible: false,
             headerTitle,
           })}
+        />
+        <Stack.Screen
+          name="contact"
+          component={ContactScreen}
+          options={{
+            title: `연락처 목록`,
+          }}
         />
         <Stack.Screen
           name="Naver"
