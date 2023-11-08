@@ -10,7 +10,7 @@ const HomeScreen = ({ navigation }) => {
           navigation.navigate("Test");
           setTimeout(() => {
             navigation.navigate("contact");
-          }, 0);
+          }, 5);
         }}
       />
       <Button

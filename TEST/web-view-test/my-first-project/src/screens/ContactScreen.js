@@ -1,7 +1,15 @@
 import React from "react";
-import { View, Text, Linking, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Linking,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+} from "react-native";
 import * as Contacts from "expo-contacts";
 import { useNavigation } from "@react-navigation/native";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function App() {
   const [contacts, setContacts] = React.useState([]);
@@ -31,43 +39,63 @@ export default function App() {
   };
 
   const handleContactClick = (contact) => {
-    // Navigate to another screen with the contact's phone number.
+    console.log(contact.phoneNumbers[0].number);
     navigation.navigate("Test", {
       phoneNumber: contact.phoneNumbers[0].number,
     });
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      {contacts.map((contact) => (
-        <View
-          key={contact.id}
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            padding: 30,
-          }}
-        >
-          <TouchableOpacity onPress={() => handleContactClick(contact)}>
-            <Text style={{ marginRight: 10 }}>
-              {contact.name} - {contact.phoneNumbers[0].number}
-            </Text>
-          </TouchableOpacity>
+    <FlatList
+      data={contacts}
+      keyExtractor={(contact) => contact.id.toString()}
+      renderItem={({ item: contact }) => (
+        <View style={styles.contactItem}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <AntDesign
+              style={{ paddingRight: 20 }}
+              name="contacts"
+              size={35}
+              color="black"
+            />
+            <TouchableOpacity onPress={() => handleContactClick(contact)}>
+              <Text style={styles.contactName}>{contact.name}</Text>
+              <Text style={styles.contactName}>
+                {contact.phoneNumbers[0].number}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
           <TouchableOpacity
             onPress={() => handleCall(contact.phoneNumbers[0].number)}
           >
-            <Text style={{ color: "blue", textDecorationLine: "underline" }}>
-              CALL
-            </Text>
+            <Text style={styles.callButton}>CALL</Text>
           </TouchableOpacity>
         </View>
-      ))}
-    </View>
+      )}
+    />
   );
 }
+
+const styles = StyleSheet.create({
+  contactItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 16,
+    backgroundColor: "#A9D0F5", // 배경색 지정
+    marginBottom: 8,
+    borderRadius: 8, // 둥근 테두리
+    marginHorizontal: 15,
+  },
+  contactName: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginRight: 10,
+    color: "#333", // 텍스트 색상 지정
+  },
+  callButton: {
+    color: "#007BFF", // CALL 버튼 색상 지정
+    textDecorationLine: "underline",
+  },
+});
