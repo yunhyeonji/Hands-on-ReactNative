@@ -6,12 +6,11 @@ import { DeviceMotion } from "expo-sensors";
 export default function TestView({ route, navigation }) {
   const webViewRef = useRef(null);
   const [shakeCount, setShakeCount] = useState(0);
-  const [newCount, setNewCount] = useState(0);
 
   // 이벤트 핸들링과 상태 업데이트
   useEffect(() => {
     const subscription = DeviceMotion.addListener((data) => {
-      if (data.acceleration && data.acceleration.x > 5) {
+      if (data.acceleration && data.acceleration.x > 30) {
         console.log("기기가 흔들렸습니다!");
         setShakeCount((prevCount) => {
           const updatedCount = prevCount + 1;
@@ -38,10 +37,20 @@ export default function TestView({ route, navigation }) {
   useEffect(() => {
     const phoneNumber = route.params?.phoneNumber;
     if (phoneNumber) {
-      postWebviewMessage("선택한 전화번호는 " + phoneNumber + "입니다.");
+      // postWebviewMessage("선택한 전화번호는 " + phoneNumber + "입니다.");
+      postWebviewMessage(phoneNumber);
       navigation.setParams({ phoneNumber: null });
     }
   }, [route.params?.phoneNumber]);
+
+  // 이미지 사진 받는 이벤트 처리
+  useEffect(() => {
+    const photoURL = route.params?.photoURL;
+    if (photoURL) {
+      postWebviewMessage(photoURL.uri);
+      navigation.setParams({ photoURL: null });
+    }
+  }, [route.params?.photoURL]);
 
   // 웹뷰에서 이벤트 받기
   const onWebviewMessage = (e) => {
