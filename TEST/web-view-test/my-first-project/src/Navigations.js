@@ -63,7 +63,7 @@ const Navigations = () => {
           name="Test"
           component={TestView}
           options={({ route }) => ({
-            title: `테스트 웹뷰`,
+            title: `다누시스 웹앱 테스트`,
             backgroundColor: route.params?.backgroundColor,
           })}
         />

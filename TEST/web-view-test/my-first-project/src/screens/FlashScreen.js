@@ -70,17 +70,19 @@ export default function FlashlightControl() {
             </TouchableOpacity>
           </View>
           {capturedImage && (
-            <>
+            <View style={{ flexDirection: "row" }}>
               <Image
                 source={{ uri: capturedImage }}
                 style={{
-                  marginTop: 20,
+                  marginTop: 5,
                   width: 100,
                   height: 100,
                 }}
               />
-              <Text>웹페이지로 전송기능은 구현중</Text>
-            </>
+              <Text style={{ paddingLeft: 10, verticalAlign: "middle" }}>
+                웹페이지로 {"\n"}전송기능은 구현중
+              </Text>
+            </View>
           )}
         </View>
       )}
