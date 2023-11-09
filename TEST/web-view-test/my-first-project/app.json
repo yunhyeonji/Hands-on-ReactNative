@@ -23,7 +23,7 @@
       "usesCleartextTraffic": true,
       "package": "com.yunhj.myfirstproject",
       "config": { "googleServicesFile": "./google-services.json" },
-      "permissions": [],
+      "permissions": ["CAMERA", "CAMERA_ROLL"],
       "intentFilters": [
         {
           "action": "VOLUME_UP",

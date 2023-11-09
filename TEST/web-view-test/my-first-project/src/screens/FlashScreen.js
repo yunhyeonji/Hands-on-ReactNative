@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { Camera } from "expo-camera";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import * as ImageManipulator from "expo-image-manipulator";
 
 export default function FlashlightControl() {
   const [hasPermission, setHasPermission] = useState(null);
@@ -26,20 +27,11 @@ export default function FlashlightControl() {
 
   const takePicture = async () => {
     if (cameraRef.current) {
-      let photo = await cameraRef.current.takePictureAsync();
-      const base64Image = `data:image/jpeg;base64,${photo.base64}`;
-      setCapturedImage(photo); // 찍힌 사진을 저장
-
-      // base64Image를 웹뷰로 전송
-      const message = {
-        image: base64Image,
-      };
-      // webViewRef.current.postMessage(JSON.stringify(message));
-      console.log("사진이 찍혔습니다:", JSON.stringify(message));
-      // 이제 photo를 사용하거나 저장하는 등의 추가 작업을 수행할 수 있습니다.
-      navigation.navigate("Test", {
-        photoURL: photo,
-      });
+      const photo = await cameraRef.current.takePictureAsync();
+      setCapturedImage(photo.uri);
+      // navigation.navigate("Test", {
+      //   photoURL: photo,
+      // });
     }
   };
 
@@ -63,20 +55,33 @@ export default function FlashlightControl() {
           />
           <View style={styles.buttonView}>
             <TouchableOpacity style={styles.button} onPress={takePicture}>
-              <MaterialCommunityIcons name="camera" size={50} color="black" />
+              <MaterialCommunityIcons name="camera" size={40} color="black" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={toggleFlashlight}>
               {flashOn ? (
                 <MaterialCommunityIcons
                   name="flash-off"
-                  size={50}
+                  size={40}
                   color="black"
                 />
               ) : (
-                <MaterialCommunityIcons name="flash" size={50} color="black" />
+                <MaterialCommunityIcons name="flash" size={40} color="black" />
               )}
             </TouchableOpacity>
           </View>
+          {capturedImage && (
+            <>
+              <Image
+                source={{ uri: capturedImage }}
+                style={{
+                  marginTop: 20,
+                  width: 100,
+                  height: 100,
+                }}
+              />
+              <Text>웹페이지로 전송기능은 구현중</Text>
+            </>
+          )}
         </View>
       )}
     </View>
