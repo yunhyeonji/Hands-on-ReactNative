@@ -36,8 +36,10 @@ function App() {
       }
     };
     document.addEventListener("message", handleEvent);
+    window.addEventListener("message", handleEvent);
     return () => {
       document.removeEventListener("message", handleEvent);
+      window.addEventListener("message", handleEvent);
     };
   }, []);
 
