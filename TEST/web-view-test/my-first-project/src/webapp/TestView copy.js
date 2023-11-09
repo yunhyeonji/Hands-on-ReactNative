@@ -6,7 +6,6 @@ import { DeviceMotion } from "expo-sensors";
 export default function TestView({ route, navigation }) {
   const webViewRef = useRef(null);
   const [shakeCount, setShakeCount] = useState(0);
-  const [newCount, setNewCount] = useState(0);
 
   // 이벤트 핸들링과 상태 업데이트
   useEffect(() => {
@@ -48,7 +47,7 @@ export default function TestView({ route, navigation }) {
   useEffect(() => {
     const photoURL = route.params?.photoURL;
     if (photoURL) {
-      postWebviewMessage(photoURL.uri);
+      postWebviewMessage(photoURL);
       navigation.setParams({ photoURL: null });
     }
   }, [route.params?.photoURL]);
