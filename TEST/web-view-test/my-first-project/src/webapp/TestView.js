@@ -2,11 +2,40 @@ import React, { useRef, useEffect, useState } from "react";
 import { WebView } from "react-native-webview";
 import { Button, StyleSheet, View } from "react-native";
 import { DeviceMotion } from "expo-sensors";
+import * as Notifications from "expo-notifications";
 
 export default function TestView({ route, navigation }) {
   const webViewRef = useRef(null);
   const [shakeCount, setShakeCount] = useState(0);
   const [newCount, setNewCount] = useState(0);
+
+  //푸시 알림
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    }),
+  });
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Notifications.requestPermissionsAsync();
+      if (status !== "granted") {
+        alert("알림 권한이 거부되었습니다!");
+      }
+    })();
+  }, []);
+
+  const sendNotification = async () => {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "웹뷰알림전송",
+        body: "알림내용 부분입니다.",
+      },
+      trigger: null, // 즉시 보내려면 'trigger'에 'null'을 설정
+    });
+  };
 
   // 이벤트 핸들링과 상태 업데이트
   useEffect(() => {
@@ -54,8 +83,12 @@ export default function TestView({ route, navigation }) {
 
   // 웹뷰에서 이벤트 받기
   const onWebviewMessage = (e) => {
-    console.log(e.nativeEvent.data);
-    navigation.navigate(e.nativeEvent.data);
+    let data = e.nativeEvent.data.split(",");
+    if (data[0] === "N") {
+      sendNotification();
+    } else {
+      navigation.navigate(data[1]);
+    }
   };
 
   // 웹뷰로 이벤트 보내기

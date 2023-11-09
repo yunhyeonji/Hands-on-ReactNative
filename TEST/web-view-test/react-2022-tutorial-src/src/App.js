@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { FaCamera, FaInternetExplorer } from "react-icons/fa";
 import { BiSolidContact } from "react-icons/bi";
 import { MdOutlineSos } from "react-icons/md";
+import { AiFillNotification } from "react-icons/ai";
 
 function App() {
   const [sosState, setSosState] = useState(false); // sos 상태
@@ -55,14 +56,14 @@ function App() {
       <nav className="wrapper">
         <div
           onClick={() => {
-            window.ReactNativeWebView.postMessage("Flash");
+            window.ReactNativeWebView.postMessage("Y,Flash");
           }}
         >
           <FaCamera size="27" color="#000000" />
         </div>
         <div
           onClick={() => {
-            window.ReactNativeWebView.postMessage("contact");
+            window.ReactNativeWebView.postMessage("Y,contact");
           }}
         >
           <BiSolidContact size="27" color="#000000" />
@@ -82,10 +83,17 @@ function App() {
         </div>
         <div
           onClick={() => {
-            window.ReactNativeWebView.postMessage("Danu");
+            window.ReactNativeWebView.postMessage("Y,Danu");
           }}
         >
           <FaInternetExplorer size="27" color="#000000" />
+        </div>
+        <div
+          onClick={() => {
+            window.ReactNativeWebView.postMessage("N,Notifi");
+          }}
+        >
+          <AiFillNotification size="27" color="#000000" />
         </div>
       </nav>
     </div>
