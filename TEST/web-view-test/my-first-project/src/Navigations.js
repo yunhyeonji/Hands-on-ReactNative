@@ -21,7 +21,7 @@ const Navigations = () => {
   return (
     <NavigationContainer>
       {/* 내비게이션 설정 */}
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="Test">
         <Stack.Screen
           name="Home"
           component={HomeScreen}
@@ -71,7 +71,7 @@ const Navigations = () => {
           name="Flash"
           component={FlashScreen}
           options={{
-            title: `플래시`,
+            title: `카메라 및 플래시`,
           }}
         />
       </Stack.Navigator>
