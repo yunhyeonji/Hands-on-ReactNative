@@ -4,7 +4,7 @@ const HomeScreen = ({ navigation }) => {
   console.log({ navigation });
   return (
     <View>
-      <Button
+      {/* <Button
         title="전화 기능 설정"
         onPress={() => {
           navigation.navigate("Test");
@@ -12,7 +12,7 @@ const HomeScreen = ({ navigation }) => {
             navigation.navigate("contact");
           }, 5);
         }}
-      />
+      /> */}
       <Button
         title="네이버 웹뷰"
         onPress={() => {
@@ -25,12 +25,12 @@ const HomeScreen = ({ navigation }) => {
           navigation.navigate("Test");
         }}
       />
-      <Button
+      {/* <Button
         title="플래시"
         onPress={() => {
           navigation.navigate("Flash");
         }}
-      />
+      /> */}
     </View>
   );
 };

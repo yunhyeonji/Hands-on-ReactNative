@@ -38,7 +38,6 @@ export default function TestView({ route, navigation }) {
   useEffect(() => {
     const phoneNumber = route.params?.phoneNumber;
     if (phoneNumber) {
-      // postWebviewMessage("선택한 전화번호는 " + phoneNumber + "입니다.");
       postWebviewMessage(phoneNumber);
       navigation.setParams({ phoneNumber: null });
     }

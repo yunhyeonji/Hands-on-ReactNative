@@ -46,7 +46,10 @@ function App() {
       <div id="image-container"></div>
       {/* 선택한 전화번호 띄우기 */}
       {selectedPhoneNumber && (
-        <contact> 선택하신 전화번호는 {selectedPhoneNumber} 입니다.</contact>
+        <h2>
+          선택하신 전화번호는 <br />
+          {selectedPhoneNumber} 입니다.
+        </h2>
       )}
       {/* 내비게이션  */}
       <nav className="wrapper">
