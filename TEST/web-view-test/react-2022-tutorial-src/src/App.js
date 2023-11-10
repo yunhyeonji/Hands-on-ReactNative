@@ -45,6 +45,7 @@ function App() {
 
   return (
     <div
+      basename="/webapp"
       style={{
         flex: 1,
         backgroundColor: sosState ? "lightpink" : "white",

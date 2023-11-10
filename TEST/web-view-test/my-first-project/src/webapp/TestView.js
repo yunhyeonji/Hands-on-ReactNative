@@ -105,7 +105,7 @@ export default function TestView({ route, navigation }) {
       <WebView
         ref={webViewRef}
         style={styles.container}
-        source={{ uri: "http://172.20.14.69:3000/react-2022-tutorial-src" }}
+        source={{ uri: "http://reactwebapp.dothome.co.kr/webapp/" }}
         onMessage={onWebviewMessage}
       />
     </View>
