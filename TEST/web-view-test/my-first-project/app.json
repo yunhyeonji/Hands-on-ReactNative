@@ -23,7 +23,12 @@
       },
       "package": "com.yunhj.myfirstproject",
       "config": {},
-      "permissions": ["CAMERA", "CAMERA_ROLL", "ACTIVITY_RECOGNITION"],
+      "permissions": [
+        "CAMERA",
+        "CAMERA_ROLL",
+        "ACTIVITY_RECOGNITION",
+        "ACCESS_BACKGROUND_LOCATION"
+      ],
       "intentFilters": [
         {
           "action": "VOLUME_UP",
