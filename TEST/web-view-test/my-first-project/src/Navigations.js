@@ -8,6 +8,7 @@ import NaverView from "./webapp/NaverView";
 import TestView from "./webapp/TestView";
 import React from "react";
 import DanuView from "./webapp/DanuView";
+import StepCountScreen from "./screens/StepCounterScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,7 +22,7 @@ const Navigations = () => {
   return (
     <NavigationContainer>
       {/* 내비게이션 설정 */}
-      <Stack.Navigator initialRouteName="Test">
+      <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
           name="Home"
           component={HomeScreen}
@@ -66,6 +67,13 @@ const Navigations = () => {
             title: `다누시스 웹앱 테스트`,
             backgroundColor: route.params?.backgroundColor,
           })}
+        />
+        <Stack.Screen
+          name="StepCounter"
+          component={StepCountScreen}
+          options={{
+            title: `만보기 기능`,
+          }}
         />
         <Stack.Screen
           name="Flash"

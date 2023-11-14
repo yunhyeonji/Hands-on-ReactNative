@@ -13,16 +13,22 @@ const HomeScreen = ({ navigation }) => {
           }, 5);
         }}
       /> */}
-      <Button
+      {/* <Button
         title="네이버 웹뷰"
         onPress={() => {
           navigation.navigate("Naver");
         }}
-      />
+      /> */}
       <Button
         title="테스트"
         onPress={() => {
           navigation.navigate("Test");
+        }}
+      />
+      <Button
+        title="만보기 기능"
+        onPress={() => {
+          navigation.navigate("StepCounter");
         }}
       />
       {/* <Button
