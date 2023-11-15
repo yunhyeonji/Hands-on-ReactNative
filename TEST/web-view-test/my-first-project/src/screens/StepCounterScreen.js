@@ -11,7 +11,14 @@ import { Pedometer } from "expo-sensors";
 import * as Location from "expo-location";
 
 export default function StepCounterScreen() {
+  // 걸음수
   const [stepCount, setStepCount] = useState(0);
+  // 거리 계산
+  let Dist = stepCount / 1300;
+  let DistanceCovered = Dist.toFixed(4);
+  // 칼로리 계산
+  let cal = DistanceCovered * 60;
+  let caloriesBurnt = cal.toFixed(3);
 
   const stepCountFunc = () => {
     const subscribe = Pedometer.watchStepCount((result) => {
@@ -68,8 +75,14 @@ export default function StepCounterScreen() {
           uri: "https://blog.kakaocdn.net/dn/ed9WhD/btr2ZCo0nVf/mPce1icYwOptbCVLMC4HG0/img.jpg",
         }}
       >
-        <View style={styles.stepCountView}>
-          <Text style={styles.stepCount}>걸음 수: {stepCount}</Text>
+        <View style={styles.stepCountContainer}>
+          <View style={styles.stepCountView}>
+            <Text style={styles.stepCount}>걸음 수: {stepCount} steps</Text>
+            <Text style={styles.stepCount}>거리 : {DistanceCovered} km</Text>
+            <Text style={styles.stepCount}>
+              소모된 칼로리 : {caloriesBurnt} Kcal
+            </Text>
+          </View>
         </View>
       </ImageBackground>
     </View>
@@ -80,19 +93,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  stepCountView: {
+  stepCountContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "flex-end",
-    margin: 5,
+    margin: "1%",
+  },
+  stepCountView: {
+    width: "70%",
+    borderRadius: 10,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    padding: "2%",
   },
   stepCount: {
     color: "white",
-    backgroundColor: "rgba(0,0,0,0.5)",
-    // alignSelf: "center",
-    fontSize: 30,
+    fontSize: 17,
     fontWeight: "bold",
-    padding: 5,
-    borderRadius: 10,
+    padding: "2%",
   },
 });
