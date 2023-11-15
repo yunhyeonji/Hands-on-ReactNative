@@ -1,26 +1,57 @@
 import React, { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import {
+  Text,
+  View,
+  Platform,
+  PermissionsAndroid,
+  ImageBackground,
+  StyleSheet,
+} from "react-native";
 import { Pedometer } from "expo-sensors";
 import * as Location from "expo-location";
 
 export default function StepCounterScreen() {
   const [stepCount, setStepCount] = useState(0);
 
+  const stepCountFunc = () => {
+    const subscribe = Pedometer.watchStepCount((result) => {
+      console.log("Step count result:", result.steps);
+      setStepCount(result.steps);
+    });
+
+    return () => {
+      subscribe.remove();
+    };
+  };
+
   useEffect(() => {
     const requestPermission = async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status === "granted") {
-        // 앱 컴포넌트가 마운트되면 권한을 요청하고 걸음 수를 가져옵니다.
-        const subscribe = Pedometer.watchStepCount((result) => {
-          setStepCount(result.steps);
-        });
 
-        // 컴포넌트가 언마운트될 때 구독을 정리합니다.
-        return () => {
-          subscribe.remove();
-        };
+      if (status === "granted") {
+        if (Platform.OS === "android") {
+          // Platform is Android
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACTIVITY_RECOGNITION,
+            {
+              title: "권한 요청",
+              message: "'신체활동'에 대한 권한 요청입니다.",
+              buttonNeutral: "Ask Me Later",
+              buttonNegative: "Cancel",
+              buttonPositive: "OK",
+            }
+          );
+
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            stepCountFunc();
+          } else {
+            console.log("Activity recognition permission denied on Android");
+          }
+        } else {
+          // Platform is iOS
+          stepCountFunc();
+        }
       } else {
-        // 권한이 거부된 경우에 대한 처리
         console.log("Location permission denied");
       }
     };
@@ -29,8 +60,39 @@ export default function StepCounterScreen() {
   }, []);
 
   return (
-    <View>
-      <Text>걸음 수: {stepCount}</Text>
+    <View style={styles.container}>
+      <ImageBackground
+        style={{ flex: 1 }}
+        resizeMode="cover"
+        source={{
+          uri: "https://blog.kakaocdn.net/dn/ed9WhD/btr2ZCo0nVf/mPce1icYwOptbCVLMC4HG0/img.jpg",
+        }}
+      >
+        <View style={styles.stepCountView}>
+          <Text style={styles.stepCount}>걸음 수: {stepCount}</Text>
+        </View>
+      </ImageBackground>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  stepCountView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "flex-end",
+    margin: 5,
+  },
+  stepCount: {
+    color: "white",
+    backgroundColor: "rgba(0,0,0,0.5)",
+    // alignSelf: "center",
+    fontSize: 30,
+    fontWeight: "bold",
+    padding: 5,
+    borderRadius: 10,
+  },
+});
