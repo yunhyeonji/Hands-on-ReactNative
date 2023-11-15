@@ -71,9 +71,6 @@ export default function StepCounterScreen() {
       <ImageBackground
         style={{ flex: 1 }}
         resizeMode="cover"
-        // source={{
-        //   uri: "https://blog.kakaocdn.net/dn/ed9WhD/btr2ZCo0nVf/mPce1icYwOptbCVLMC4HG0/img.jpg",
-        // }}
         source={require("../../assets/running.jpg")}
       >
         <View style={styles.stepCountContainer}>
