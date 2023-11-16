@@ -44,24 +44,24 @@ function App() {
   }, []);
 
   return (
-    <div
-      basename="/webapp"
-      style={{
-        flex: 1,
-        backgroundColor: sosState ? "lightpink" : "white",
-        height: "92vh",
-        transition: "background-color 0.5s",
-      }}
-    >
-      {/* 이미지 띄우기 */}
-      <div id="image-container"></div>
+    <div basename="/webapp">
+      <div
+        style={{
+          backgroundColor: sosState ? "lightpink" : "white",
+          height: "90vh",
+          transition: "background-color 0.5s",
+        }}
+      >
+        {/* 이미지 띄우기 */}
+        <div id="image-container"></div>
 
-      {initText.map((item, index) => (
-        <li key={index}>{item}</li>
-      ))}
+        {initText.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
 
-      {/* 앱쪽에서 보낸 이벤트 확인*/}
-      <h2 className="">{text}</h2>
+        {/* 앱쪽에서 보낸 이벤트 확인*/}
+        <h2 className="">{text}</h2>
+      </div>
       {/* 내비게이션  */}
       <nav className="wrapper">
         <div

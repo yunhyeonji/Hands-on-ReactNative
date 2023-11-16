@@ -13,6 +13,7 @@ import * as Location from "expo-location";
 export default function StepCounterScreen() {
   // 걸음수
   const [stepCount, setStepCount] = useState(0);
+  const [pastStepCount, setPastStepCount] = useState(0);
   // 거리 계산
   let Dist = stepCount / 1300;
   let DistanceCovered = Dist.toFixed(4);
@@ -20,7 +21,32 @@ export default function StepCounterScreen() {
   let cal = DistanceCovered * 60;
   let caloriesBurnt = cal.toFixed(3);
 
-  const stepCountFunc = () => {
+  const stepCountIOSFunc = async () => {
+    const isAvailable = await Pedometer.isAvailableAsync();
+
+    if (isAvailable) {
+      const end = new Date();
+      const start = new Date();
+      start.setDate(end.getDate() - 1);
+
+      const pastStepCountResult = await Pedometer.getStepCountAsync(start, end);
+      console.log(pastStepCountResult);
+      if (pastStepCountResult) {
+        setPastStepCount(pastStepCountResult.steps);
+      }
+
+      const subscribe = Pedometer.watchStepCount((result) => {
+        setStepCount(result.steps);
+      });
+
+      return () => {
+        subscribe.remove();
+      };
+    }
+  };
+
+  // 걸음수 측정 api
+  const stepCountANDROIDFunc = () => {
     const subscribe = Pedometer.watchStepCount((result) => {
       console.log("Step count result:", result.steps);
       setStepCount(result.steps);
@@ -38,25 +64,32 @@ export default function StepCounterScreen() {
       if (status === "granted") {
         if (Platform.OS === "android") {
           // Platform is Android
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACTIVITY_RECOGNITION,
-            {
-              title: "권한 요청",
-              message: "'신체활동'에 대한 권한 요청입니다.",
-              buttonNeutral: "Ask Me Later",
-              buttonNegative: "Cancel",
-              buttonPositive: "OK",
-            }
-          );
+          if (Platform.Version >= 29) {
+            // 안드로이드 버전 10 이상인 경우 권한 요청
+            const granted = await PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.ACTIVITY_RECOGNITION,
+              {
+                title: "권한 요청",
+                message: "'신체활동'에 대한 권한 요청입니다.",
+                buttonNeutral: "Ask Me Later",
+                buttonNegative: "Cancel",
+                buttonPositive: "OK",
+              }
+            );
 
-          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            stepCountFunc();
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+              stepCountANDROIDFunc();
+            } else {
+              console.log("Activity recognition permission denied on Android");
+            }
           } else {
-            console.log("Activity recognition permission denied on Android");
+            // 안드로이드 버전 10 미만인 경우 요청 필요없음
+            stepCountANDROIDFunc();
           }
         } else {
           // Platform is iOS
-          stepCountFunc();
+          console.log(Platform.OS);
+          stepCountIOSFunc();
         }
       } else {
         console.log("Location permission denied");
@@ -80,6 +113,13 @@ export default function StepCounterScreen() {
             <Text style={styles.stepCount}>
               소모된 칼로리 : {caloriesBurnt} Kcal
             </Text>
+            {Platform.OS === "ios" ? (
+              <Text style={styles.stepCount}>
+                어제 걸음 수 : {pastStepCount} steps
+              </Text>
+            ) : (
+              ""
+            )}
           </View>
         </View>
       </ImageBackground>
