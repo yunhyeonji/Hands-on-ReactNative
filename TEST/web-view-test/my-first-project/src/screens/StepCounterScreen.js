@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Pedometer } from "expo-sensors";
 import * as Location from "expo-location";
+import ModalScreen from "./ModalScreen";
 
 export default function StepCounterScreen() {
   // 걸음수
@@ -21,6 +22,10 @@ export default function StepCounterScreen() {
   let cal = DistanceCovered * 60;
   let caloriesBurnt = cal.toFixed(3);
 
+  // 위치권한 팝업 띄우기
+  const [visible, setVisible] = useState(false);
+
+  // 걸음수 측정 - IOS api
   const stepCountIOSFunc = async () => {
     const isAvailable = await Pedometer.isAvailableAsync();
 
@@ -45,7 +50,7 @@ export default function StepCounterScreen() {
     }
   };
 
-  // 걸음수 측정 api
+  // 걸음수 측정 - 안드로이드 api
   const stepCountANDROIDFunc = () => {
     const subscribe = Pedometer.watchStepCount((result) => {
       console.log("Step count result:", result.steps);
@@ -57,6 +62,27 @@ export default function StepCounterScreen() {
     };
   };
 
+  // 백그라운드 위치 권한 허용
+  const checkBackgroundLocationPermission = async () => {
+    const { status } = await Location.getBackgroundPermissionsAsync();
+    if (status === "granted") {
+      console.log("백그라운드 위치 권한이 항상 허용되었습니다.");
+    } else {
+      console.log("백그라운드 위치 권한이 허용되지 않았습니다.");
+      setVisible(true);
+    }
+  };
+
+  // 모달 -> 항상 허용 버튼 클릭시
+  const onConfirm = () => {
+    Location.requestBackgroundPermissionsAsync();
+    setVisible(false);
+  };
+  // 모달 -> 닫기 버튼 클릭시
+  const onClose = () => {
+    setVisible(false);
+  };
+
   useEffect(() => {
     const requestPermission = async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -64,6 +90,7 @@ export default function StepCounterScreen() {
       if (status === "granted") {
         if (Platform.OS === "android") {
           // Platform is Android
+          await checkBackgroundLocationPermission();
           if (Platform.Version >= 29) {
             // 안드로이드 버전 10 이상인 경우 권한 요청
             const granted = await PermissionsAndroid.request(
@@ -101,6 +128,7 @@ export default function StepCounterScreen() {
 
   return (
     <View style={styles.container}>
+      <ModalScreen visible={visible} onConfirm={onConfirm} onClose={onClose} />
       <ImageBackground
         style={{ flex: 1 }}
         resizeMode="cover"
