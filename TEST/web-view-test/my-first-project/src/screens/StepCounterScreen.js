@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Text,
   View,
@@ -6,6 +6,7 @@ import {
   PermissionsAndroid,
   ImageBackground,
   StyleSheet,
+  AppState,
 } from "react-native";
 import { Pedometer } from "expo-sensors";
 import * as Location from "expo-location";
@@ -21,6 +22,30 @@ export default function StepCounterScreen() {
   // 칼로리 계산
   let cal = DistanceCovered * 60;
   let caloriesBurnt = cal.toFixed(3);
+
+  // 백그라운드, 포그라운드 상태 구분하기
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
+  useEffect(() => {
+    const subscri = AppState.addEventListener("change", (nextAppState) => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === "active"
+      ) {
+        console.log("App has come to the foreground!");
+      }
+
+      appState.current = nextAppState;
+      setAppStateVisible(appState.current);
+      console.log("AppState", appState.current);
+      console.log("-------------------------------------");
+    });
+
+    return () => {
+      subscri.remove();
+    };
+  }, []);
 
   // 위치권한 팝업 띄우기
   const [visible, setVisible] = useState(false);
@@ -86,7 +111,6 @@ export default function StepCounterScreen() {
   useEffect(() => {
     const requestPermission = async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
-
       if (status === "granted") {
         if (Platform.OS === "android") {
           // Platform is Android
@@ -105,6 +129,7 @@ export default function StepCounterScreen() {
             );
 
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+              // ACTIVITY_RECOGNITION 권한 획득 시 걸음 수 측정 시작
               stepCountANDROIDFunc();
             } else {
               console.log("Activity recognition permission denied on Android");
@@ -115,7 +140,6 @@ export default function StepCounterScreen() {
           }
         } else {
           // Platform is iOS
-          console.log(Platform.OS);
           stepCountIOSFunc();
         }
       } else {
