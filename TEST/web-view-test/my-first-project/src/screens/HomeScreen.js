@@ -34,7 +34,7 @@ const HomeScreen = ({ navigation }) => {
       <Button
         title="백그라운드 테스트 진행"
         onPress={() => {
-          navigation.navigate('test');
+          navigation.navigate('BackgroundTask');
         }}
       />
       {/* <Button

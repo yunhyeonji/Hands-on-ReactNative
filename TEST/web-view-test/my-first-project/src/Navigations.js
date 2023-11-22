@@ -9,7 +9,7 @@ import TestView from './webapp/TestView';
 import React from 'react';
 import DanuView from './webapp/DanuView';
 import StepCountScreen from './screens/StepCounterScreen';
-import BackgroundFetchScreen from './screens/test';
+import BackgroundFetchScreen from './screens/BackgroundTask';
 const Stack = createNativeStackNavigator();
 
 const headerTitle = ({ children }) => (
@@ -76,7 +76,7 @@ const Navigations = () => {
           }}
         />
         <Stack.Screen
-          name="test"
+          name="BackgroundTask"
           component={BackgroundFetchScreen}
           options={{
             title: `백그라운드 테스트 진행`,
