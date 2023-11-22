@@ -1,15 +1,15 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomeScreen from "./screens/HomeScreen";
-import ContactScreen from "./screens/ContactScreen";
-import FlashScreen from "./screens/FlashScreen";
-import { Text, View } from "react-native";
-import NaverView from "./webapp/NaverView";
-import TestView from "./webapp/TestView";
-import React from "react";
-import DanuView from "./webapp/DanuView";
-import StepCountScreen from "./screens/StepCounterScreen";
-
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import HomeScreen from './screens/HomeScreen';
+import ContactScreen from './screens/ContactScreen';
+import FlashScreen from './screens/FlashScreen';
+import { Text, View } from 'react-native';
+import NaverView from './webapp/NaverView';
+import TestView from './webapp/TestView';
+import React from 'react';
+import DanuView from './webapp/DanuView';
+import StepCountScreen from './screens/StepCounterScreen';
+import BackgroundFetchScreen from './screens/test';
 const Stack = createNativeStackNavigator();
 
 const headerTitle = ({ children }) => (
@@ -27,14 +27,14 @@ const Navigations = () => {
           name="Home"
           component={HomeScreen}
           options={{
-            title: "홈",
+            title: '홈',
             // Header 블록에 대한 스타일
-            headerStyle: { backgroundColor: "#29b6f6" },
+            headerStyle: { backgroundColor: '#29b6f6' },
             //Header의 텍스트, 버튼들 색상
-            headerTintColor: "#fff",
+            headerTintColor: '#fff',
             //타이틀 텍스트 스타일
             headerTitleStyle: {
-              fontWeight: "bold",
+              fontWeight: 'bold',
               fontSize: 20,
             },
           }}
@@ -73,6 +73,13 @@ const Navigations = () => {
           component={StepCountScreen}
           options={{
             title: `만보기 기능`,
+          }}
+        />
+        <Stack.Screen
+          name="test"
+          component={BackgroundFetchScreen}
+          options={{
+            title: `백그라운드 테스트 진행`,
           }}
         />
         <Stack.Screen

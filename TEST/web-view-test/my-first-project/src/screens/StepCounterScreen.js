@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from 'react';
 import {
   Text,
   View,
@@ -7,10 +7,10 @@ import {
   ImageBackground,
   StyleSheet,
   AppState,
-} from "react-native";
-import { Pedometer } from "expo-sensors";
-import * as Location from "expo-location";
-import ModalScreen from "./ModalScreen";
+} from 'react-native';
+import { Pedometer } from 'expo-sensors';
+import * as Location from 'expo-location';
+import ModalScreen from './ModalScreen';
 
 export default function StepCounterScreen() {
   // 걸음수
@@ -28,22 +28,27 @@ export default function StepCounterScreen() {
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
   useEffect(() => {
-    const subscri = AppState.addEventListener("change", (nextAppState) => {
-      if (
-        appState.current.match(/inactive|background/) &&
-        nextAppState === "active"
+    const appStateChage = AppState.addEventListener('change', (nextAppState) => {
+      console.log(
+        'nextAppState > ' + nextAppState,
+        ', appState.current > ' + appState.current
+      );
+      if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+        console.log('App has come to the foreground!');
+      } else if (
+        appState.current.match(/inactive|active/) &&
+        nextAppState === 'background'
       ) {
-        console.log("App has come to the foreground!");
+        console.log('App has come to the background!');
       }
 
       appState.current = nextAppState;
       setAppStateVisible(appState.current);
-      console.log("AppState", appState.current);
-      console.log("-------------------------------------");
+      console.log('-------------------------------------');
     });
 
     return () => {
-      subscri.remove();
+      appStateChage.remove();
     };
   }, []);
 
@@ -78,7 +83,7 @@ export default function StepCounterScreen() {
   // 걸음수 측정 - 안드로이드 api
   const stepCountANDROIDFunc = () => {
     const subscribe = Pedometer.watchStepCount((result) => {
-      console.log("Step count result:", result.steps);
+      console.log('Step count result:', result.steps);
       setStepCount(result.steps);
     });
 
@@ -90,10 +95,9 @@ export default function StepCounterScreen() {
   // 백그라운드 위치 권한 허용
   const checkBackgroundLocationPermission = async () => {
     const { status } = await Location.getBackgroundPermissionsAsync();
-    if (status === "granted") {
-      console.log("백그라운드 위치 권한이 항상 허용되었습니다.");
+    if (status === 'granted') {
+      console.log('백그라운드 위치 권한이 항상 허용되었습니다.');
     } else {
-      console.log("백그라운드 위치 권한이 허용되지 않았습니다.");
       setVisible(true);
     }
   };
@@ -111,8 +115,8 @@ export default function StepCounterScreen() {
   useEffect(() => {
     const requestPermission = async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status === "granted") {
-        if (Platform.OS === "android") {
+      if (status === 'granted') {
+        if (Platform.OS === 'android') {
           // Platform is Android
           await checkBackgroundLocationPermission();
           if (Platform.Version >= 29) {
@@ -120,11 +124,11 @@ export default function StepCounterScreen() {
             const granted = await PermissionsAndroid.request(
               PermissionsAndroid.PERMISSIONS.ACTIVITY_RECOGNITION,
               {
-                title: "권한 요청",
+                title: '권한 요청',
                 message: "'신체활동'에 대한 권한 요청입니다.",
-                buttonNeutral: "Ask Me Later",
-                buttonNegative: "Cancel",
-                buttonPositive: "OK",
+                buttonNeutral: 'Ask Me Later',
+                buttonNegative: 'Cancel',
+                buttonPositive: 'OK',
               }
             );
 
@@ -132,7 +136,7 @@ export default function StepCounterScreen() {
               // ACTIVITY_RECOGNITION 권한 획득 시 걸음 수 측정 시작
               stepCountANDROIDFunc();
             } else {
-              console.log("Activity recognition permission denied on Android");
+              console.log('Activity recognition permission denied on Android');
             }
           } else {
             // 안드로이드 버전 10 미만인 경우 요청 필요없음
@@ -143,7 +147,7 @@ export default function StepCounterScreen() {
           stepCountIOSFunc();
         }
       } else {
-        console.log("Location permission denied");
+        console.log('Location permission denied');
       }
     };
 
@@ -156,21 +160,17 @@ export default function StepCounterScreen() {
       <ImageBackground
         style={{ flex: 1 }}
         resizeMode="cover"
-        source={require("../../assets/running.jpg")}
+        source={require('../../assets/running.jpg')}
       >
         <View style={styles.stepCountContainer}>
           <View style={styles.stepCountView}>
             <Text style={styles.stepCount}>걸음 수: {stepCount} steps</Text>
             <Text style={styles.stepCount}>거리 : {DistanceCovered} km</Text>
-            <Text style={styles.stepCount}>
-              소모된 칼로리 : {caloriesBurnt} Kcal
-            </Text>
-            {Platform.OS === "ios" ? (
-              <Text style={styles.stepCount}>
-                어제 걸음 수 : {pastStepCount} steps
-              </Text>
+            <Text style={styles.stepCount}>소모된 칼로리 : {caloriesBurnt} Kcal</Text>
+            {Platform.OS === 'ios' ? (
+              <Text style={styles.stepCount}>어제 걸음 수 : {pastStepCount} steps</Text>
             ) : (
-              ""
+              ''
             )}
           </View>
         </View>
@@ -185,20 +185,20 @@ const styles = StyleSheet.create({
   },
   stepCountContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "flex-end",
-    margin: "1%",
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    margin: '1%',
   },
   stepCountView: {
-    width: "70%",
+    width: '70%',
     borderRadius: 10,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    padding: "2%",
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    padding: '2%',
   },
   stepCount: {
-    color: "white",
+    color: 'white',
     fontSize: 17,
-    fontWeight: "bold",
-    paddingVertical: "2%",
+    fontWeight: 'bold',
+    paddingVertical: '2%',
   },
 });

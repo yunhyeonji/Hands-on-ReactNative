@@ -1,7 +1,7 @@
-import { Button, View } from "react-native";
+import { Button, View } from 'react-native';
 
 const HomeScreen = ({ navigation }) => {
-  console.log({ navigation });
+  // console.log({ navigation });
   return (
     <View>
       {/* <Button
@@ -22,13 +22,19 @@ const HomeScreen = ({ navigation }) => {
       <Button
         title="테스트"
         onPress={() => {
-          navigation.navigate("Test");
+          navigation.navigate('Test');
         }}
       />
       <Button
         title="만보기 기능"
         onPress={() => {
-          navigation.navigate("StepCounter");
+          navigation.navigate('StepCounter');
+        }}
+      />
+      <Button
+        title="백그라운드 테스트 진행"
+        onPress={() => {
+          navigation.navigate('test');
         }}
       />
       {/* <Button
