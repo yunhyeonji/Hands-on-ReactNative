@@ -97,6 +97,7 @@ export default function StepCounterScreen() {
     const { status } = await Location.getBackgroundPermissionsAsync();
     if (status === 'granted') {
       console.log('백그라운드 위치 권한이 항상 허용되었습니다.');
+      stepCountANDROIDFunc();
     } else {
       setVisible(true);
     }
@@ -106,10 +107,12 @@ export default function StepCounterScreen() {
   const onConfirm = () => {
     Location.requestBackgroundPermissionsAsync();
     setVisible(false);
+    stepCountANDROIDFunc();
   };
   // 모달 -> 닫기 버튼 클릭시
   const onClose = () => {
     setVisible(false);
+    stepCountANDROIDFunc();
   };
 
   useEffect(() => {
@@ -118,7 +121,6 @@ export default function StepCounterScreen() {
       if (status === 'granted') {
         if (Platform.OS === 'android') {
           // Platform is Android
-          await checkBackgroundLocationPermission();
           if (Platform.Version >= 29) {
             // 안드로이드 버전 10 이상인 경우 권한 요청
             const granted = await PermissionsAndroid.request(
@@ -134,7 +136,7 @@ export default function StepCounterScreen() {
 
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
               // ACTIVITY_RECOGNITION 권한 획득 시 걸음 수 측정 시작
-              stepCountANDROIDFunc();
+              await checkBackgroundLocationPermission();
             } else {
               console.log('Activity recognition permission denied on Android');
             }
