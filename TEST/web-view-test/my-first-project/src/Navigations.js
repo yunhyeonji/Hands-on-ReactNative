@@ -10,6 +10,8 @@ import React from 'react';
 import DanuView from './webapp/DanuView';
 import StepCountScreen from './screens/StepCounterScreen';
 import BackgroundFetchScreen from './screens/BackgroundTask';
+import StepAccelromter from './screens/StepAccelromter';
+
 const Stack = createNativeStackNavigator();
 
 const headerTitle = ({ children }) => (
@@ -80,6 +82,13 @@ const Navigations = () => {
           component={BackgroundFetchScreen}
           options={{
             title: `백그라운드 테스트 진행`,
+          }}
+        />
+        <Stack.Screen
+          name="StepAccelromter"
+          component={StepAccelromter}
+          options={{
+            title: `가속계`,
           }}
         />
         <Stack.Screen

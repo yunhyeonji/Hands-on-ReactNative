@@ -32,11 +32,17 @@ const HomeScreen = ({ navigation }) => {
         }}
       />
       <Button
+        title="가속계 움직임 기능"
+        onPress={() => {
+          navigation.navigate('StepAccelromter');
+        }}
+      />
+      {/* <Button
         title="백그라운드 테스트 진행"
         onPress={() => {
           navigation.navigate('BackgroundTask');
         }}
-      />
+      /> */}
       {/* <Button
         title="플래시"
         onPress={() => {

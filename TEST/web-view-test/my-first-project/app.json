@@ -27,6 +27,7 @@
         "CAMERA",
         "CAMERA_ROLL",
         "ACTIVITY_RECOGNITION",
+        "ACCESS_FINE_LOCATION",
         "ACCESS_BACKGROUND_LOCATION"
       ],
       "intentFilters": [
